@@ -204,7 +204,7 @@
         appearance: none; cursor: pointer; outline: none;
     }
     
-    /* CORRECTION : FORCE LE TEXTE NOIR SUR FOND BLANC DANS LES OPTIONS */
+    /* --- CORRECTION DROPDOWN --- */
     select option { background-color: #ffffff; color: #000000; }
 
     .filter-row { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -217,7 +217,7 @@
     .filter-btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
     .filter-btn.inactive { opacity: 0.5; filter: grayscale(1); box-shadow: none; }
 
-    /* --- DECK / SLIDER DE GRAPHIQUES (CORRIGÉ) --- */
+    /* --- DECK / SLIDER DE GRAPHIQUES --- */
     .deck-container { 
         position: relative; 
         height: 380px; 
@@ -495,7 +495,7 @@
                         <div class="filter-row">
                             <button class="filter-btn" style="background:var(--c-water)" onclick="toggleFilter('Eau', this)">Eau</button>
                             <button class="filter-btn" style="background:var(--c-nature)" onclick="toggleFilter('Nature', this)">Nature</button>
-                            <button class="filter-btn" style="background:var(--c-foret)" onclick="toggleFilter('Forêt', this)">Forêt</button>
+                            <button class="filter-btn" style="background:var(--c-foret)" onclick="toggleFilter('Forêt', this)">Bois</button>
                             <button class="filter-btn" style="background:var(--c-agri)" onclick="toggleFilter('Agri', this)">Agricole</button>
                             <button class="filter-btn" style="background:var(--c-artif)" onclick="toggleFilter('Artif', this)">Artificialisé</button>
                         </div>
@@ -524,7 +524,7 @@
                             <div class="deck-card active" onclick="activateDeck(this)" id="card-conf">
                                 <div class="deck-header">
                                     <div class="deck-title" id="title-conf">Indice de Confiance</div>
-                                    <span style="font-size:0.7rem; color:#888;">Indice moyen (0-100)</span>
+                                    <span style="font-size:0.7rem; color:#888;">Score moyen (0-100)</span>
                                 </div>
                                 <div class="chart-content" id="chart-confiance"></div>
                             </div>
@@ -847,6 +847,7 @@
             switch(cat) {
                 case 'Agri': return 'Agricole';
                 case 'Artif': return 'Artificialisé';
+                case 'Forêt': return 'Bois'; /* Modification affichage Forêt -> Bois */
                 default: return cat;
             }
         }
