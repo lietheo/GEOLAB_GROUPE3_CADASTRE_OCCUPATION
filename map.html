@@ -20,7 +20,7 @@
             --c-agri: #F2CA27; 
             --c-nature: #699a1c; 
             --c-water: #4A90E2; 
-            --c-foret: #835217; /* Renommé en Bois dans l'affichage uniquement */
+            --c-foret: #835217;
             
             --color-primary: #F97316; /* Orange Aude */
             
@@ -63,9 +63,7 @@
             border: 1px solid var(--border-glass); margin-bottom: 10px;
         }
         .sidebar-select { width: 100%; background: transparent; color: var(--text-main); border: none; font-size: 0.9rem; font-weight: 700; text-align: center; cursor: pointer; outline:none; }
-        
-        /* CORRECTION MENU : Texte noir sur fond blanc */
-        .sidebar-select option { background-color: #ffffff; color: #000000; }
+        .sidebar-select option { background: #0B0F1A; color: white; }
 
         /* --- MAP AREA --- */
         .map-area { flex: 1; position: relative; background: #000; min-width: 0; }
@@ -163,6 +161,7 @@
         .stat-label { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text-main); width: 120px; flex-shrink: 0; }
         .stat-dot { width: 8px; height: 8px; border-radius: 50%; }
         
+        /* Barre de progression alignée correctement */
         .progress-track { flex: 1; height: 6px; background: var(--border-glass); border-radius: 3px; overflow: hidden; margin-top: 6px; }
         .progress-fill { height: 100%; border-radius: 3px; }
         
@@ -170,7 +169,7 @@
         .badge { padding: 2px 8px; border-radius: 4px; font-weight: 700; border: 1px solid var(--border-glass); font-size: 0.65rem; }
         .badge-ia { color: #EAB308; border-color: rgba(234, 179, 8, 0.3); background: rgba(234, 179, 8, 0.1); }
 
-        /* --- GRAPHIQUE COMPARATIF ALIGNÉ GAUCHE --- */
+        /* --- CORRECTION GRAPHIQUE COMPARATIF (AXE CENTRÉ) --- */
         .comparison-box { margin-top: 10px; }
         .comp-row { display: flex; align-items: center; height: 28px; font-size: 0.8rem; margin-top:12px; }
         .comp-lbl { width: 100px; color: var(--text-muted); font-weight: 600; flex-shrink: 0; } 
@@ -180,16 +179,20 @@
             height: 100%; 
             position: relative; 
             margin: 0 15px; 
-            border-left: 1px solid var(--border-glass); 
         }
         
+        /* Axe central */
+        .comp-track::before {
+            content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; 
+            background: var(--border-glass); z-index: 0;
+        }
+
         .comp-bar { 
             height: 6px; 
             position: absolute; 
             top: 50%; 
             transform: translateY(-50%); 
-            left: 0; 
-            border-radius: 0 4px 4px 0; 
+            border-radius: 10px; 
             z-index: 1;
         }
         
@@ -203,52 +206,25 @@
         .hidden { display: none !important; }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 2999; display: none; }
-        /* POPUP AGRANDI pour accueillir le tuto */
-        .info-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; max-height: 85vh; overflow-y: auto; background: #1E293B; padding: 40px; border-radius: 24px; z-index: 3000; display: none; color:white; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
-        
-        /* Styles pour le guide */
-        .guide-step { margin-bottom: 15px; border-left: 2px solid var(--color-primary); padding-left: 15px; }
-        .guide-title { font-weight: 700; color: white; display: block; margin-bottom: 4px; }
-        .guide-desc { font-size: 0.9rem; color: var(--text-muted); margin: 0; }
+        .info-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; background: #1E293B; padding: 40px; border-radius: 24px; z-index: 3000; display: none; color:white; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
     </style>
 </head>
 <body>
 
     <div class="modal-overlay" onclick="toggleInfo()"></div>
     <div class="info-modal" id="infoModal">
-        <h2 style="font-family:'Playfair Display'; margin-top:0; color:var(--color-primary); font-size:2rem; margin-bottom:20px;">Guide & Méthodologie</h2>
+        <h2 style="font-family:'Playfair Display'; margin-top:0; color:var(--color-primary); font-size:2rem; margin-bottom:20px;">Méthodologie</h2>
         
-        <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; margin-bottom:30px;">
-            <h4 style="margin:0 0 15px 0; text-transform:uppercase; font-size:0.8rem; color:#94A3B8;">Comment utiliser la carte ?</h4>
-            
-            <div class="guide-step">
-                <span class="guide-title">1. Sélectionnez une Dalle</span>
-                <p class="guide-desc">Cliquez sur une parcelle sur la carte ou utilisez le menu déroulant à gauche.</p>
-            </div>
-            <div class="guide-step">
-                <span class="guide-title">2. Analysez les données</span>
-                <p class="guide-desc">Le panneau de droite affiche les statistiques (surfaces, confiance, répartition).</p>
-            </div>
-            <div class="guide-step">
-                <span class="guide-title">3. Comparez les méthodes</span>
-                <p class="guide-desc">Utilisez les boutons "Méthode 1" et "Méthode 2" en haut de la carte pour voir les différences.</p>
-            </div>
-            <div class="guide-step" style="border:none;">
-                <span class="guide-title">4. Vérifiez le terrain</span>
-                <p class="guide-desc">L'onglet "Vue Satellite" permet de confronter l'analyse à la photo aérienne réelle.</p>
-            </div>
-        </div>
-
         <div style="margin-bottom:25px;">
             <h4 style="margin:0 0 10px 0; text-transform:uppercase; font-size:0.8rem; color:#94A3B8;">Méthode 1 (Score par classe)</h4>
-            <p style="line-height:1.6; font-size:0.95rem; margin:0; color:#E2E8F0;">
+            <p style="line-height:1.6; font-size:1rem; margin:0; color:#E2E8F0;">
                 Cette approche repose sur une <strong>fusion des indicateurs</strong> de chaque source via des scores calculés pour chaque classe. La classe obtenant le score le plus élevé est retenue pour qualifier la parcelle.
             </p>
         </div>
 
         <div>
             <h4 style="margin:0 0 10px 0; text-transform:uppercase; font-size:0.8rem; color:#94A3B8;">Méthode 2 (Arbre de décision)</h4>
-            <p style="line-height:1.6; font-size:0.95rem; margin:0; color:#E2E8F0;">
+            <p style="line-height:1.6; font-size:1rem; margin:0; color:#E2E8F0;">
                 Classification procédant par étapes logiques, à la manière d'un <strong>Arbre de décision</strong> :
             <br><br>
             • <strong>Le Tronc</strong> : Comparaison initiale des sources satellites (OSO et COSIA).<br>
@@ -257,7 +233,7 @@
             </p>
         </div>
 
-        <button class="m-btn active" style="width:100%; margin-top:30px; font-size:1rem; padding:15px;" onclick="toggleInfo()">Commencer l'exploration</button>
+        <button class="m-btn active" style="width:100%; margin-top:30px; font-size:1rem; padding:15px;" onclick="toggleInfo()">Compris</button>
     </div>
 
     <div class="app-container">
@@ -316,7 +292,7 @@
             <div id="view-details" class="hidden" style="display:flex; flex-direction:column; height:100%;">
                 <div class="panel-header">
                     <span class="panel-subtitle">Analyse Parcellaire</span>
-                    <h1 class="panel-title" style="margin-top:0;">Analyse <span style="white-space:nowrap">Dalle <span id="zoneTitleId">--</span></span></h1>
+                    <h1 class="panel-title" id="zoneTitle">Dalle --</h1>
                     <div class="tabs-nav">
                         <button class="tab-link active" onclick="switchTab('donnees')">Qualité de la donnée</button>
                         <button class="tab-link" onclick="switchTab('satellite')">Vue satellite</button>
@@ -351,7 +327,7 @@
                         <div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:8px; margin: 25px 0 10px 0; border:1px solid var(--border-glass);">
                             <p style="font-size:0.8rem; color:var(--text-muted); margin:0; line-height:1.6;">
                                 <i class="fas fa-chart-line" style="color:var(--color-primary); margin-right:8px;"></i>
-                                <strong>Interprétation :</strong> Le graphique ci-dessous illustre le différentiel de classification. Une barre verte indique un gain en M2, une barre rouge indique une perte.
+                                <strong>Interprétation :</strong> Le graphique ci-dessous illustre le différentiel de classification pour la dalle. Une barre verte (vers la droite) indique un gain en M2, une barre rouge (vers la gauche) indique une perte.
                             </p>
                     </div>
                         <div class="comparison-box">
@@ -375,16 +351,6 @@
     </div>
 
     <script>
-        // --- OUVERTURE AUTO DU GUIDE AU LANCEMENT ---
-        window.onload = function() {
-            setTimeout(function() {
-                var m = document.getElementById('infoModal'); 
-                var o = document.querySelector('.modal-overlay');
-                m.style.display = 'block';
-                o.style.display = 'block';
-            }, 500); // Petit délai pour laisser l'interface charger
-        };
-
         // CONFIG & DICTIONNAIRES
         var geoDataM1 = null, geoDataM2 = null, currentLayer = null; 
         var currentMethod = 'm1';
@@ -403,9 +369,9 @@
         }
 
         const colors = { 
-            'Eau': '#4A90E2', 'Nature': '#699a1c', 'Bois': '#835217', 'Agricole': '#F2CA27', 'Artificialisé': '#ec7a7a' 
+            'Eau': '#4A90E2', 'Nature': '#699a1c', 'Forêt': '#835217', 'Agricole': '#F2CA27', 'Artificialisé': '#ec7a7a' 
         };
-        const orderedCats = ['Artificialisé', 'Agricole', 'Bois', 'Nature', 'Eau'];
+        const orderedCats = ['Artificialisé', 'Agricole', 'Forêt', 'Nature', 'Eau'];
         
         // 1. INITIALISATION MAP
         var map = L.map('map', { zoomControl: false, attributionControl:false }).setView([43.1026, 2.4140], 12);
@@ -527,7 +493,7 @@
             document.getElementById('view-details').classList.remove('hidden');
             document.getElementById('view-details').style.display = 'flex';
             
-            document.getElementById('zoneTitleId').innerText = dalleId;
+            document.getElementById('zoneTitle').innerText = "Dalle " + dalleId;
             var pill = document.getElementById('mapStatus');
             pill.style.display='block'; pill.innerText="Dalle "+dalleId+" ("+currentMethod.toUpperCase()+")";
 
@@ -629,16 +595,22 @@
             var max = Math.max(...diffs.map(x=>Math.abs(x.val)));
             
             diffs.forEach(o => {
-                var w = (Math.abs(o.val) / max) * 100; 
+                // Calcul de la position et largeur
+                // Centre = 50%
+                var w = (Math.abs(o.val) / max) * 50; 
                 var isPos = o.val > 0;
                 var col = isPos ? '#84CC16' : '#EF4444';
                 var sign = isPos ? '+' : '';
                 
+                // Si Positif : départ 50%, vers droite
+                // Si Négatif : départ 50%, vers gauche
+                var positionStyle = isPos ? 'left: 50%;' : 'right: 50%;';
+
                 container.innerHTML += `
                     <div class="comp-row">
                         <div class="comp-lbl">${o.cat}</div>
                         <div class="comp-track">
-                            <div class="comp-bar" style="width:${w}%; background:${col}; left:0; border-radius:0 4px 4px 0;"></div>
+                            <div class="comp-bar" style="width:${w}%; background:${col}; ${positionStyle}"></div>
                         </div>
                         <div class="comp-val" style="color:${col}">${sign}${o.val} <span style="font-weight:400; font-size:0.7em; color:gray">parc.</span></div>
                     </div>`;
@@ -686,7 +658,7 @@
             if(!name) return 'Artificialisé'; 
             var n = name.toUpperCase();
             if(n.includes('EAU')) return 'Eau'; 
-            if(n.includes('BOIS') || n.includes('FORET')) return 'Bois'; /* Remplacé 'Forêt' par 'Bois' */
+            if(n.includes('BOIS') || n.includes('FORET')) return 'Forêt';
             if(n.includes('NATURE') || n.includes('PELOUSE')) return 'Nature'; 
             if(n.includes('AGRI') || n.includes('CULTURE')) return 'Agricole';
             return 'Artificialisé';
