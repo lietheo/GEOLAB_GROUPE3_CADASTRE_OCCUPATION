@@ -211,14 +211,11 @@
         .info-modal { 
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
             width: 500px; 
-            /* Modif ici pour le scroll : */
             max-height: 85vh; 
             overflow-y: auto;
-            
             background: #1E293B; padding: 40px; border-radius: 24px; z-index: 3000; display: block; 
             color:white; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
         }
-        /* Style de la scrollbar du modal */
         .info-modal::-webkit-scrollbar { width: 5px; }
         .info-modal::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
     </style>
@@ -501,6 +498,7 @@
             }).addTo(map);
         }
 
+        // --- ICI LA CORRECTION PRINCIPALE : GESTION SPATIALE (GEOMETRIE) ---
         function switchMethod(m) {
             currentMethod = m;
             document.getElementById('btn-m1').className = m==='m1'?'m-btn active':'m-btn';
@@ -513,22 +511,48 @@
             // 2. Si une dalle/parcelle était déjà sélectionnée
             if(selectedDalleId) {
                 
-                // Si une parcelle (feature) précise était sélectionnée, on cherche sa JUMELLE dans le nouveau fichier
+                // Si une parcelle (feature) précise était sélectionnée
                 if(selectedFeature) {
-                    var oldId = selectedFeature.properties.NUMERO || selectedFeature.properties.id; // La Clé !
-                    if(oldId) {
-                        // On cherche dans targetData la feature qui a le même ID
-                        var newFeature = targetData.features.find(f => (f.properties.NUMERO || f.properties.id) === oldId);
-                        if(newFeature) {
-                            selectedFeature = newFeature; // On remplace par la nouvelle version
-                        }
+                    // Au lieu de l'ID, on utilise la position (Géolocalisation)
+                    // On filtre d'abord par la Dalle courante pour accélérer
+                    var candidates = targetData.features.filter(f => String(f.properties['DALLE']) === String(selectedDalleId));
+                    
+                    // On cherche la feature candidate la plus proche spatialement
+                    var matched = findClosestFeature(selectedFeature, candidates);
+                    
+                    if(matched) {
+                        selectedFeature = matched;
                     }
                 }
                 
-                // 3. On rafraichit l'affichage avec la nouvelle feature (ou null si pas trouvée)
+                // 3. On rafraichit l'affichage
                 showStatsForDalle(selectedDalleId, selectedFeature);
                 if(selectedFeature) updateMiniMap(selectedFeature);
             }
+        }
+
+        // Nouvelle fonction utilitaire pour trouver la parcelle la plus proche géométriquement
+        function findClosestFeature(sourceFeature, candidateList) {
+            if(!sourceFeature || !candidateList || candidateList.length === 0) return null;
+
+            // Centre de la parcelle source
+            var centerSource = L.geoJSON(sourceFeature).getBounds().getCenter();
+            var closest = null;
+            var minDistance = Infinity;
+
+            candidateList.forEach(target => {
+                var centerTarget = L.geoJSON(target).getBounds().getCenter();
+                var dist = centerSource.distanceTo(centerTarget); // Distance en mètres (approximatif leaflet proj)
+                
+                // Si la distance est infime (ex: moins de 5 mètres), c'est la même parcelle
+                if(dist < minDistance) {
+                    minDistance = dist;
+                    closest = target;
+                }
+            });
+
+            // Sécurité : si la plus proche est à > 20m, on considère qu'elle n'existe pas dans l'autre jeu
+            return (minDistance < 20) ? closest : null;
         }
 
         // 5. PANNEAU & STATS
