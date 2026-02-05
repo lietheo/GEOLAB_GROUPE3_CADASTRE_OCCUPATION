@@ -203,6 +203,9 @@
         font-family: 'DM Sans'; font-size: 0.85rem; font-weight: 700; color: var(--color-dark);
         appearance: none; cursor: pointer; outline: none;
     }
+    
+    /* CORRECTION : FORCE LE TEXTE NOIR SUR FOND BLANC DANS LES OPTIONS */
+    select option { background-color: #ffffff; color: #000000; }
 
     .filter-row { display: flex; flex-wrap: wrap; gap: 6px; }
     .filter-btn { 
@@ -445,7 +448,7 @@
                         <div class="context-title"><i class="fas fa-exclamation-triangle"></i> Le conflit d'occupation</div>
                         <p class="context-text">
                             Les bases de données actuelles divergent souvent. 
-                            <strong>OSO (Gauche)</strong> détecte la couverture biophysique (ex: de l'herbe), tandis que <strong>COSIA (Droite)</strong> intègre des données métiers pour comprendre l'occupation réel.
+                            <strong>L'OSO (Gauche)</strong> détecte la couverture biophysique (ex: de l'herbe), tandis que <strong>COSIA (Droite)</strong> intègre des données métiers pour comprendre l'occupation réel.
                         </p>
                     </div>
 
