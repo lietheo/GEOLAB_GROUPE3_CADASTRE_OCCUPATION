@@ -448,7 +448,7 @@
                         <div class="context-title"><i class="fas fa-exclamation-triangle"></i> Le conflit d'occupation</div>
                         <p class="context-text">
                             Les bases de données actuelles divergent souvent. 
-                            <strong>L'OSO (Gauche)</strong> détecte la couverture biophysique (ex: de l'herbe), tandis que <strong>COSIA (Droite)</strong> intègre des données métiers pour comprendre l'occupation réel.
+                            <strong>OSO (Gauche)</strong> détecte la couverture biophysique (ex: de l'herbe), tandis que <strong>COSIA (Droite)</strong> intègre des données métiers pour comprendre l'occupation réel.
                         </p>
                     </div>
 
@@ -511,7 +511,7 @@
                         <div class="context-box">
                             <div class="context-title"><i class="fas fa-chart-line"></i> Indicateur de Fiabilité</div>
                             <p class="context-text">
-                                L'algorithme ne se contente pas de classifier, il évalue la <strong>qualité de sa prédiction</strong>.
+                                Les algorithmes (Méthode 1 : Score par classe et Méthode 2 : Arbre de décision) ne se contentent pas de classifier, ils évaluent la <strong>qualité de leur prédiction</strong>.
                                 Une approche statistique multidimensionnelle permettant d'identifier les zones "floues" nécessitant une expertise humaine.
                             </p>
                         </div>
@@ -524,7 +524,7 @@
                             <div class="deck-card active" onclick="activateDeck(this)" id="card-conf">
                                 <div class="deck-header">
                                     <div class="deck-title" id="title-conf">Indice de Confiance</div>
-                                    <span style="font-size:0.7rem; color:#888;">Score moyen (0-100)</span>
+                                    <span style="font-size:0.7rem; color:#888;">Indice (0-100)</span>
                                 </div>
                                 <div class="chart-content" id="chart-confiance"></div>
                             </div>
@@ -556,7 +556,7 @@
                 <span class="subtitle" style="justify-content:center;">Synthèse Macro</span>
                 <h2 style="margin-top:10px;">Structure du Territoire.</h2>
                 <p class="description-text" style="margin: 0 auto;">
-                    Au-delà de la simple visualisation, cette vue synthétique permet de mesurer l'impact surfacique des changements méthodologiques à l'échelle départementale et d'apprécier la dominance des surfaces agricoles.
+                    Au-delà de la simple visualisation, cette vue synthétique permet de mesurer l'impact parcellaire des changements méthodologiques à l'échelle de la zone d'étude et d'apprécier la dominance générale.
                 </p>
             </div>
 
@@ -570,7 +570,7 @@
 
             <div class="treemap-section">
                 <div class="treemap-header">
-                    <h3 class="treemap-title" style="font-size:1.4rem;">Méthode 1 </h3>
+                    <h3 class="treemap-title" style="font-size:1.4rem;">Méthode 1 (score par classe) </h3>
                     <span style="color:#666; font-weight:700; font-size:0.75rem; background:#eee; padding:4px 8px; border-radius:4px;">SCORE</span>
                 </div>
                 
@@ -584,12 +584,12 @@
 
             <div class="treemap-section">
                 <div class="treemap-header">
-                    <h3 class="treemap-title" style="font-size:1.4rem;">Méthode 2 </h3>
+                    <h3 class="treemap-title" style="font-size:1.4rem;">Méthode 2 (arbre de décision)</h3>
                     <span style="color:white; background:var(--color-vivid); font-weight:700; font-size:0.75rem; padding:4px 8px; border-radius:4px;">ARBRE DE DÉCISION</span>
                 </div>
 
                 <p style="font-size:0.9rem; color:#666; margin-bottom:15px; font-style:italic;">
-                    Classification affinée par croisement des données métiers (RPG, Cadastre) et analyse probabiliste avancée.
+                    Cette approche se fonde sur un arbre de décision intégrant des règles d'expertise pour déterminer la dominance de chaque parcelle.
                 </p>
                 
                 <div class="tm-container" id="treemap-container-2" style="height:220px; background:#f4f4f4;"></div>
