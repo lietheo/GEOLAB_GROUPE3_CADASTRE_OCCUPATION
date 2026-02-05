@@ -378,7 +378,7 @@
                 var o = document.querySelector('.modal-overlay');
                 m.style.display = 'block';
                 o.style.display = 'block';
-            }, 500); // Petit délai pour laisser l'interface charger
+            }, 500); 
         };
 
         // CONFIG & DICTIONNAIRES
@@ -508,19 +508,39 @@
             }).addTo(map);
         }
 
+        // --- CORRECTION DU RESET DE LA PARCELLE LORS DU CHANGEMENT DE MÉTHODE ---
         function switchMethod(m) {
+            // 1. Sauvegarder l'ID de la parcelle actuelle
+            var savedParcelId = null;
+            if (selectedFeature && selectedFeature.properties) {
+                // On utilise NUMERO ou id comme identifiant unique
+                savedParcelId = selectedFeature.properties.NUMERO || selectedFeature.properties.id;
+            }
+
             currentMethod = m;
             document.getElementById('btn-m1').className = m==='m1'?'m-btn active':'m-btn';
             document.getElementById('btn-m2').className = m==='m2'?'m-btn active':'m-btn';
-            displayLayer(m === 'm1' ? geoDataM1 : geoDataM2);
             
-            // CORRECTION IMPORTANTE : Si une parcelle était sélectionnée, on la garde affichée
-            if(selectedFeature && selectedDalleId) {
-                // On cherche la même parcelle dans le nouveau dataset
-                // On utilise une clé unique si dispo (ex: ID_PARCEL) ou on essaie de matcher grossièrement
-                // Ici on garde simplement l'affichage global de la dalle, car l'ID peut varier entre M1/M2
-                // Mais on réaffiche les stats de la dalle
-                showStatsForDalle(selectedDalleId, null); // On perd le focus précis parcelle pour éviter les bugs ID, mais on garde la dalle
+            var newData = (m === 'm1' ? geoDataM1 : geoDataM2);
+            displayLayer(newData);
+
+            // 2. Tenter de retrouver la parcelle dans le nouveau jeu de données
+            var found = false;
+            if (savedParcelId && currentLayer) {
+                currentLayer.eachLayer(function(layer) {
+                    var p = layer.feature.properties;
+                    // On compare les IDs
+                    if ((p.NUMERO && p.NUMERO === savedParcelId) || (p.id && p.id === savedParcelId)) {
+                        // 3. Simuler le clic sur la nouvelle parcelle
+                        layer.fireEvent('click'); 
+                        found = true;
+                    }
+                });
+            }
+
+            // Si on n'a pas retrouvé la parcelle (ou si aucune n'était sélectionnée), on reste au niveau de la Dalle
+            if (!found && selectedDalleId) {
+                showStatsForDalle(selectedDalleId, null);
             }
         }
 
@@ -690,7 +710,7 @@
             if(!name) return 'Artificialisé'; 
             var n = name.toUpperCase();
             if(n.includes('EAU')) return 'Eau'; 
-            if(n.includes('BOIS') || n.includes('FORET')) return 'Bois'; /* Remplacé 'Forêt' par 'Bois' */
+            if(n.includes('BOIS') || n.includes('FORET')) return 'Bois'; /* Renommé en Bois */
             if(n.includes('NATURE') || n.includes('PELOUSE')) return 'Nature'; 
             if(n.includes('AGRI') || n.includes('CULTURE')) return 'Agricole';
             return 'Artificialisé';
