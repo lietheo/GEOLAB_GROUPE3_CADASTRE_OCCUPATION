@@ -98,7 +98,6 @@
     .page-section { 
         min-height: 100vh; width: 100%; display: flex; 
         position: relative; padding-left: 80px;
-        /* Correction : height auto permet au contenu de s'afficher sans scroll interne */
         height: auto; 
     }
 
@@ -121,7 +120,7 @@
     .p1-content { width: 50%; padding: 15vh 6% 15vh 8%; display: flex; flex-direction: column; justify-content: center; }
     .p1-map-container { 
         width: 50%; height: 100vh; background: #F8F9FA; 
-        position: sticky; top: 0; right: 0; /* Sticky permet de suivre le scroll */
+        position: sticky; top: 0; right: 0; 
     }
     #map-home { height: 100%; width: 100%; opacity: 0.9; }
     .kpi-section { margin-top: 50px; display: flex; gap: 50px; padding-bottom: 40px; border-bottom: 1px solid #E2E8F0; margin-bottom: 40px; }
@@ -133,8 +132,7 @@
     .big-number span { display: block; font-family: 'DM Sans'; font-size: 0.7rem; color: #94A3B8; font-weight: 700; text-transform: uppercase; margin-top: 8px; letter-spacing: 1px; }
     .highlight { color: var(--color-vivid); font-weight: 700; }
 
-    /* --- 5. PAGE 2 & 3 (SPLIT MODIFIÉ POUR EVITER SCROLL) --- */
-    /* La clé est ici : height auto et min-height 100vh */
+    /* --- 5. PAGE 2 & 3 (SPLIT) --- */
     .split-layout { 
         display: flex; width: 100%; min-height: 100vh; height: auto; align-items: stretch;
     }
@@ -144,13 +142,11 @@
         display: flex; flex-direction: column; justify-content: center; 
         background: var(--bg-main); 
         z-index: 2;
-        /* Suppression de overflow-y auto pour afficher tout le texte directement */
         overflow: visible; 
     }
     
     .viz-panel { 
         width: 60%; 
-        /* La carte devient sticky pour rester visible si le texte est long */
         position: sticky; top: 0; height: 100vh;
         display: flex; 
     }
@@ -318,6 +314,10 @@
     #map-viz {
         height: 100%; width: 100%; background: #ebe7e0;
     }
+
+    /* Style spécifique pour empêcher le numéro de Dalle de tomber */
+    .dalle-number { white-space: nowrap; }
+
 </style>
 </head>
 <body>
@@ -461,7 +461,7 @@
                 <div class="text-panel">
                     <div style="padding: 40px;">
                         <span class="subtitle">Analyse Statistique</span>
-                        <h2 id="dashTitle" style="margin-top:0;">Exploration<br>Probabiliste.</h2>
+                        <h2 style="margin-top:0;">Analyse Dalle <span id="dalleNum" class="dalle-number">...</span></h2>
                         
                         <div class="context-box">
                             <div class="context-title"><i class="fas fa-chart-line"></i> Indicateur de Fiabilité</div>
@@ -790,7 +790,6 @@
             }
         }
         
-        // Helper pour afficher le nom complet
         function getCategoryLabel(cat) {
             switch(cat) {
                 case 'Agri': return 'Agricole';
@@ -807,8 +806,10 @@
             document.getElementById('btn-m1').className = m==='m1'?'method-btn active':'method-btn';
             document.getElementById('btn-m2').className = m==='m2'?'method-btn active':'method-btn';
             globalGeoData = (m === 'm1') ? geoDataM1 : geoDataM2;
+            
+            // Logique de visibilité des cartes (Deck)
             document.getElementById('card-sources').style.display = m==='m1' ? 'flex' : 'none';
-            document.getElementById('title-conf').innerText = m==='m1' ? 'Indice de Confiance' : 'Score Final';
+            
             var curDalle = document.getElementById('dalleSelector').value;
             if(curDalle) updatePage3(curDalle); 
         }
@@ -821,7 +822,9 @@
 
         function updatePage3(dalleID) {
             if(!globalGeoData || !dalleID) return;
-            document.getElementById('dashTitle').innerText = "Analyse Dalle " + dalleID;
+            // Mise à jour ciblée du numéro pour ne pas faire sauter le style
+            document.getElementById('dalleNum').innerText = dalleID;
+            
             var filtered = globalGeoData.features.filter(f => String(f.properties[DALLE_ID_KEY]) === String(dalleID));
             if (vizLayer) mapViz.removeLayer(vizLayer);
             vizLayer = L.geoJSON({type:"FeatureCollection", features:filtered}, { 
@@ -867,7 +870,7 @@
             });
             
             return Object.keys(grp).map(k=>({
-                label: getCategoryLabel(k), // Utilisation de la fonction de renommage
+                label: getCategoryLabel(k), 
                 color:grp[k].color,
                 conf:grp[k].c ? (grp[k].sConf/grp[k].c).toFixed(1) : 0,
                 src:grp[k].c ? (grp[k].sSrc/grp[k].c).toFixed(1) : 0
@@ -926,7 +929,6 @@
                 return; 
             }
 
-            // Ici on ajoute le label complet pour l'affichage
             var items = Object.keys(stats)
                 .map(k => ({ k: getCategoryLabel(k), ...stats[k], pct: (stats[k].area / totalArea) * 100 }))
                 .sort((a,b) => b.pct - a.pct);
