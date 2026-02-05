@@ -214,21 +214,54 @@
     .filter-btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
     .filter-btn.inactive { opacity: 0.5; filter: grayscale(1); box-shadow: none; }
 
-    .deck-container { perspective: 1200px; padding: 20px 0; overflow: visible; height: 400px; display: flex; align-items: center; }
+    /* --- DECK / SLIDER DE GRAPHIQUES --- */
+    /* Modification: Position relative pour contenir les cartes absolues */
+    .deck-container { 
+        position: relative; 
+        height: 380px; 
+        width: 100%; 
+        display: flex; 
+        justify-content: center; /* Centre les cartes */
+        align-items: center; 
+        perspective: 1000px;
+        margin-top: 30px;
+    }
     
     .deck-card {
-        min-width: 300px; width: 300px; height: 350px;
-        background: white; border-radius: 20px; 
-        box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); border: 1px solid #F1F5F9;
-        margin-right: -100px; position: relative; transition: 0.5s var(--ease-premium);
-        cursor: pointer; display: flex; flex-direction: column; 
+        position: absolute; /* Superpose les cartes */
+        width: 90%;         
+        max-width: 480px;
+        height: 350px;
+        background: white; 
+        border-radius: 20px; 
+        border: 1px solid #F1F5F9;
+        transition: all 0.5s var(--ease-premium);
+        cursor: pointer; 
+        display: flex; flex-direction: column; 
         transform-style: preserve-3d;
+        
+        /* État par défaut (Carte arrière) */
+        transform: translateX(40px) scale(0.92) translateZ(-50px);
+        z-index: 1;
+        opacity: 0.6;
+        box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+    }
+    
+    /* Hover sur la carte arrière pour inviter au clic */
+    .deck-card:not(.active):hover {
+        transform: translateX(50px) scale(0.94) translateZ(-40px);
+        opacity: 0.9;
+        background: #fafafa;
     }
     
     .deck-card.active {
-        width: 500px; min-width: 500px; margin-right: 40px;
-        z-index: 50; transform: translateZ(20px) rotateY(-2deg);
-        box-shadow: 0 40px 80px -20px rgba(0,0,0,0.15); border: 1px solid var(--color-vivid);
+        /* État Actif (Carte avant) */
+        transform: translateX(0) scale(1) translateZ(0);
+        z-index: 10;
+        opacity: 1;
+        cursor: default;
+        border: 1px solid var(--color-vivid);
+        box-shadow: 0 30px 60px -15px rgba(0,0,0,0.15);
     }
 
     .deck-header { padding: 20px 30px; background: #FFF; border-bottom: 1px solid #F1F5F9; border-radius: 20px 20px 0 0; }
@@ -248,6 +281,20 @@
     .chart-fill { height: 100%; border-radius: 10px; }
     .chart-val { width: 50px; text-align: right; font-weight: 800; color: var(--color-dark); }
 
+    /* FLÈCHES DE NAVIGATION POUR LE GRAPHIQUE */
+    .deck-nav-btn {
+        position: absolute; top: 50%; transform: translateY(-50%);
+        width: 40px; height: 40px; border-radius: 50%;
+        background: white; border: 1px solid #E2E8F0;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        display: flex; justify-content: center; align-items: center;
+        cursor: pointer; z-index: 20; color: var(--color-dark);
+        transition: 0.2s;
+    }
+    .deck-nav-btn:hover { background: var(--color-vivid); color: white; border-color: var(--color-vivid); }
+    .deck-prev { left: -20px; }
+    .deck-next { right: -20px; }
+    
     /* --- 7. PAGE 4 (STRUCTURE) --- */
     #page4 { 
         position: relative; z-index: 10; background: var(--bg-main); 
@@ -289,7 +336,8 @@
     body.night .context-box, 
     body.night .legend-item,
     body.night .method-switch,
-    body.night .capsule-select-wrapper { 
+    body.night .capsule-select-wrapper,
+    body.night .deck-nav-btn { 
         background: #1E293B; border-color: #334155; color: #F1F5F9; 
     }
     
@@ -472,7 +520,11 @@
                         </div>
 
                         <div class="deck-container" style="height: 350px; margin-top:30px;">
-                            <div class="deck-card active" onclick="activateDeck(this)">
+                            <div class="deck-nav-btn deck-prev" id="nav-prev" onclick="toggleCard()">
+                                <i class="fas fa-chevron-left"></i>
+                            </div>
+                            
+                            <div class="deck-card active" onclick="activateDeck(this)" id="card-conf">
                                 <div class="deck-header">
                                     <div class="deck-title" id="title-conf">Indice de Confiance</div>
                                     <span style="font-size:0.7rem; color:#888;">Score moyen (0-100)</span>
@@ -488,6 +540,10 @@
                                 <div class="chart-content" id="chart-sources">
                                     <p style="font-size:0.8rem; color:#999;">Analyse de la concordance entre les différentes bases de données administratives pour chaque parcelle.</p>
                                 </div>
+                            </div>
+                            
+                            <div class="deck-nav-btn deck-next" id="nav-next" onclick="toggleCard()">
+                                <i class="fas fa-chevron-right"></i>
                             </div>
                         </div>
 
@@ -807,8 +863,11 @@
             document.getElementById('btn-m2').className = m==='m2'?'method-btn active':'method-btn';
             globalGeoData = (m === 'm1') ? geoDataM1 : geoDataM2;
             
-            // Logique de visibilité des cartes (Deck)
-            document.getElementById('card-sources').style.display = m==='m1' ? 'flex' : 'none';
+            // Logique de visibilité des cartes ET des flèches
+            var displayVal = m==='m1' ? 'flex' : 'none';
+            document.getElementById('card-sources').style.display = displayVal;
+            document.getElementById('nav-prev').style.display = displayVal;
+            document.getElementById('nav-next').style.display = displayVal;
             
             var curDalle = document.getElementById('dalleSelector').value;
             if(curDalle) updatePage3(curDalle); 
@@ -885,7 +944,30 @@
                 el.innerHTML += `<div class="chart-row"><div class="chart-lbl">${d.label}</div><div class="chart-bg"><div class="chart-fill" style="width:${pct}%; background:${d.color}"></div></div><div class="chart-val">${d[key]}</div></div>`;
             });
         }
-        function activateDeck(el) { document.querySelectorAll('.deck-card').forEach(c=>c.classList.remove('active')); el.classList.add('active'); }
+
+        // --- NOUVELLE FONCTION DE NAVIGATION (FLÈCHES + CLIC) ---
+        function activateDeck(el) {
+            // Si on clique sur une carte, on l'active
+            var cards = document.querySelectorAll('.deck-card');
+            cards.forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function toggleCard() {
+            // Fonction utilisée par les flèches : inverse simplement l'état
+            var cards = document.querySelectorAll('.deck-card');
+            // Si on est en méthode 2 (une seule carte), on ne fait rien
+            if(currentMethod === 'm2') return;
+
+            // Simple logique de bascule pour 2 cartes
+            if(cards[0].classList.contains('active')) {
+                cards[0].classList.remove('active');
+                cards[1].classList.add('active');
+            } else {
+                cards[1].classList.remove('active');
+                cards[0].classList.add('active');
+            }
+        }
 
         // --- 6. PAGE 4 : TREEMAPS ---
         function updatePage4_Top(targetDalle) {
