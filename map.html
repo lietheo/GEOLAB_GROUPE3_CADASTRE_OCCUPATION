@@ -489,7 +489,7 @@
                     l.on('click', function(e) {
                         L.DomEvent.stopPropagation(e);
                         currentLayer.resetStyle();
-                        e.target.setStyle({ weight: 3, color: '#F97316', fillOpacity: 0.4 }); e.target.bringToFront();
+                        e.target.setStyle({ weight: 3, color: '#F97316', fillOpacity: 0.1 }); e.target.bringToFront();
                         showStatsForDalle(f.properties['DALLE'], f);
                         updateMiniMap(f);
                         map.fitBounds(e.target.getBounds(), {padding:[100,100], maxZoom:16});
@@ -527,7 +527,7 @@
                     // 4. RÉ-APPLIQUER LE CONTOUR (FIX CONTOUR)
                     currentLayer.eachLayer(function(layer) {
                         if(layer.feature === selectedFeature) {
-                            layer.setStyle({ weight: 3, color: '#F97316', fillOpacity: 0.4 });
+                            layer.setStyle({ weight: 3, color: '#F97316', fillOpacity: 0.1 });
                             layer.bringToFront();
                         }
                     });
