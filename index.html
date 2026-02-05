@@ -18,10 +18,10 @@
 <style>
     /* --- 1. VARIABLES & RESET --- */
     :root {
-        --bg-main: #F8FAFC;          
-        --color-vivid: #F97316;      
-        --color-dark: #0F172A;       
-        --text-body: #334155;        
+        --bg-main: #F8FAFC;           
+        --color-vivid: #F97316;       
+        --color-dark: #0F172A;        
+        --text-body: #334155;         
         --glass-border: rgba(255, 255, 255, 0.6);
         --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
         
@@ -46,24 +46,21 @@
         pointer-events: none; z-index: 9999; mix-blend-mode: multiply;
     }
 
-    /* --- CREDITS FIXES (NOUVEAU) --- */
-    /* --- CREDITS FIXES (CORRIGÉ) --- */
+    /* --- CREDITS FIXES --- */
     .credits-fixed {
         position: fixed; bottom: 30px; left: 120px; z-index: 2000;
         display: flex; align-items: center; gap: 15px; 
         opacity: 0.8; transition: 0.3s;
-        pointer-events: none; /* Laisse passer les clics au travers */
+        pointer-events: none;
     }
     
     .credits-fixed:hover { opacity: 1; }
 
-    /* Ligne verticale orange */
     .credits-separator {
         width: 2px; height: 35px; background: var(--color-vivid);
         border-radius: 2px;
     }
 
-    /* Conteneur du texte */
     .credits-content {
         display: flex; flex-direction: column; justify-content: center;
     }
@@ -73,8 +70,10 @@
         font-weight: 700; 
         font-size: 1.1rem; 
         color: var(--color-dark); 
-        line-height: 1; 
+        /* CORRECTION: Augmentation de l'interligne */
+        line-height: 1.2; 
         margin-bottom: 2px;
+        padding-top: 2px; /* Evite que le haut soit coupé */
     }
     
     .credits-subtitle { 
@@ -84,9 +83,10 @@
         font-weight: 500;
     }
 
-    /* Mode Nuit pour les crédits */
+    /* Mode Nuit */
     body.night .credits-title { color: #F8FAFC; }
     body.night .credits-subtitle { color: #94A3B8; }
+
     /* --- 2. SIDEBAR & NAVIGATION --- */
     .sidebar {
         position: fixed; left: 0; top: 0; height: 100vh; width: 80px;
@@ -116,12 +116,22 @@
     }
 
     h1 { 
-        font-family: 'Playfair Display'; font-size: 5.5rem; font-weight: 800; margin: 0; line-height: 0.9;
+        font-family: 'Playfair Display'; font-size: 5.5rem; font-weight: 800; margin: 0; 
+        /* CORRECTION : Line-height augmenté et padding ajouté */
+        line-height: 1.15; 
+        padding-bottom: 10px;
         color: var(--color-vivid); 
         filter: drop-shadow(0 2px 10px rgba(0,0,0,0.1));
     }
     
-    h2 { font-family: 'Playfair Display'; font-size: 3.5rem; font-weight: 700; color: var(--color-dark); margin: 10px 0 30px 0; line-height: 1.1; }
+    h2 { 
+        font-family: 'Playfair Display'; font-size: 3.5rem; font-weight: 700; 
+        color: var(--color-dark); margin: 10px 0 30px 0; 
+        /* CORRECTION */
+        line-height: 1.3; 
+        padding-bottom: 5px;
+    }
+
     .subtitle { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: #94A3B8; font-weight: 700; display: block; margin-bottom: 10px; }
     .description-text { font-size: 1.1rem; line-height: 1.7; color: var(--text-body); max-width: 550px; }
 
@@ -134,7 +144,13 @@
     }
     #map-home { height: 100%; width: 100%; opacity: 0.9; }
     .kpi-section { margin-top: 50px; display: flex; gap: 50px; padding-bottom: 40px; border-bottom: 1px solid #E2E8F0; margin-bottom: 40px; }
-    .big-number { font-family: 'Playfair Display'; font-size: 3rem; font-weight: 700; color: var(--color-dark); line-height: 1; }
+    
+    .big-number { 
+        font-family: 'Playfair Display'; font-size: 3rem; font-weight: 700; color: var(--color-dark); 
+        /* CORRECTION */
+        line-height: 1.2; 
+        padding-bottom: 5px;
+    }
     .big-number span { display: block; font-family: 'DM Sans'; font-size: 0.7rem; color: #94A3B8; font-weight: 700; text-transform: uppercase; margin-top: 8px; letter-spacing: 1px; }
     .highlight { color: var(--color-vivid); font-weight: 700; }
 
@@ -159,9 +175,11 @@
     .context-box { 
         background: white; border-radius: 12px; padding: 25px; margin: 30px 0;
         box-shadow: var(--shadow-soft); border: 1px solid #F1F5F9;
-        position: relative; overflow: hidden;
+        position: relative; 
+        /* CORRECTION: Retrait de overflow hidden pour éviter de couper le texte */
+        /* overflow: hidden; */ 
     }
-    .context-box::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--color-vivid); }
+    .context-box::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--color-vivid); border-radius: 12px 0 0 12px; }
     .context-title { font-weight: 700; color: var(--color-dark); font-size: 0.9rem; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
     .legend-box { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
     .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 600; color: #64748B; background: white; padding: 5px 10px; border-radius: 20px; border: 1px solid #E2E8F0; }
@@ -199,10 +217,10 @@
 
     .filter-row { display: flex; flex-wrap: wrap; gap: 6px; }
     .filter-btn { 
-        border: 1px solid rgba(0,0,0,0.1); /* Bordure subtile au lieu de white */
+        border: 1px solid rgba(0,0,0,0.1);
         padding: 6px 12px; border-radius: 20px; font-size: 0.7rem; 
         font-weight: 700; color: white; cursor: pointer; transition: 0.2s; 
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Ombre douce */
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
     .filter-btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
     .filter-btn.inactive { opacity: 0.5; filter: grayscale(1); box-shadow: none; }
@@ -215,7 +233,8 @@
         background: white; border-radius: 20px; 
         box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); border: 1px solid #F1F5F9;
         margin-right: -100px; position: relative; transition: 0.5s var(--ease-premium);
-        cursor: pointer; display: flex; flex-direction: column; overflow: hidden;
+        cursor: pointer; display: flex; flex-direction: column; 
+        /* overflow: hidden; <--- SUPPRIMÉ POUR EVITER DE COUPER LE TEXTE */
         transform-style: preserve-3d;
     }
     
@@ -225,12 +244,16 @@
         box-shadow: 0 40px 80px -20px rgba(0,0,0,0.15); border: 1px solid var(--color-vivid);
     }
 
-    .deck-header { padding: 20px 30px; background: #FFF; border-bottom: 1px solid #F1F5F9; }
-    .deck-title { font-weight: 800; color: var(--color-dark); font-size: 1.2rem; }
+    .deck-header { padding: 20px 30px; background: #FFF; border-bottom: 1px solid #F1F5F9; border-radius: 20px 20px 0 0; }
+    .deck-title { 
+        font-weight: 800; color: var(--color-dark); font-size: 1.2rem; 
+        /* CORRECTION */
+        line-height: 1.4;
+    }
     .chart-content { 
         flex: 1; padding: 30px; opacity: 0; transition: 0.3s; 
         display: flex; flex-direction: column; gap: 12px;
-        background: white;
+        background: white; border-radius: 0 0 20px 20px;
     }
     .deck-card.active .chart-content { opacity: 1; transition-delay: 0.1s; }
 
@@ -255,7 +278,12 @@
 
     .treemap-section { width: 100%; margin-bottom: 40px; }
     .treemap-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #E2E8F0; }
-    .treemap-title { font-family: 'Playfair Display'; font-size: 1.5rem; color: var(--color-dark); margin: 0; }
+    .treemap-title { 
+        font-family: 'Playfair Display'; font-size: 1.5rem; color: var(--color-dark); margin: 0;
+        /* CORRECTION */
+        line-height: 1.4;
+        padding-bottom: 4px;
+    }
     
     .tm-container { 
         width: 100%; height: 240px; display: flex; border-radius: 16px; overflow: hidden; 
@@ -271,7 +299,7 @@
     }
     .cta-btn:hover { background: var(--color-vivid); transform: translateY(-3px); box-shadow: 0 20px 40px -10px rgba(249, 115, 22, 0.4); }
 
-    /* --- MODE NUIT (FIXE LISIBILITE) --- */
+    /* --- MODE NUIT --- */
     body.night { --bg-main: #0F172A; --text-body: #94A3B8; --color-dark: #F8FAFC; }
     
     body.night .map-badge-pill, 
@@ -282,19 +310,17 @@
         background: #1E293B; border-color: #334155; color: #F1F5F9; 
     }
     
-    /* Correction Page 3 en mode nuit */
     body.night .deck-card { background: #1E293B; border-color: #334155; color: #F1F5F9; }
     body.night .deck-header { background: #1E293B; border-bottom-color: #334155; }
-    body.night .deck-title { color: #F8FAFC; } /* Titre blanc */
+    body.night .deck-title { color: #F8FAFC; }
     body.night .chart-content { background: #1E293B; }
     body.night .chart-lbl { color: #CBD5E1; }
     body.night .chart-val { color: white; }
     body.night .chart-bg { background: #334155; }
     
-    /* Correction Page 4 en mode nuit */
     body.night #page4 { background: #0F172A; }
     body.night #page4 .capsule-select-wrapper { background: #1E293B; border-color: #334155; }
-    body.night #page4 .capsule-select { color: #F8FAFC; } /* Texte blanc dans select */
+    body.night #page4 .capsule-select { color: #F8FAFC; }
     
     body.night .tm-container { border-color: #1E293B; background: #1E293B; }
     body.night .credits-text { color: #94A3B8; }
@@ -317,6 +343,7 @@
             <div class="dot" data-title="Structure" onclick="scrollToId('page4')" id="dot4"></div>
         </div>
     </aside>
+    
     <div class="credits-fixed">
         <i class="fas fa-university" style="font-size:1.8rem; color:var(--text-body);"></i>
         
@@ -541,18 +568,15 @@
     
     <script>
         // --- 1. FONCTION DE CHARGEMENT UNIVERSELLE (GEOJSON & GZIP) ---
-        // C'est ici que la magie opère pour lire ton fichier .gz
         async function fetchGeoJSON(url) {
             const response = await fetch(url);
             if (!response.ok) throw new Error("Fichier introuvable : " + url);
             
-            // Si le nom du fichier finit par .gz, on décompresse avec Pako
             if (url.endsWith('.gz')) {
                 const buffer = await response.arrayBuffer();
                 const decompressed = pako.ungzip(new Uint8Array(buffer), { to: 'string' });
                 return JSON.parse(decompressed);
             }
-            // Sinon, on lit le JSON normalement (pour tes autres fichiers)
             return await response.json();
         }
 
@@ -563,14 +587,11 @@
         page1.addEventListener('mousemove', (e) => {
             const x = (window.innerWidth - e.pageX * 2) / 100;
             const y = (window.innerHeight - e.pageY * 2) / 100;
-            
-            // On bouge légèrement le conteneur de la carte
             mapContainer.style.transform = `translateX(${x}px) translateY(${y}px)`;
         });
         
-        // On adoucit le mouvement en CSS pour éviter les saccades
         mapContainer.style.transition = 'transform 0.1s ease-out';
-        // Remplace les lignes 739-740 par ça :
+        
         const URL_LIGHT = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
         const URL_DARK  = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
 
@@ -578,20 +599,15 @@
             const night = document.body.classList.contains('night');
             const urlToUse = night ? URL_DARK : URL_LIGHT;
 
-            // Liste des cartes concernées (Page 2 utilise le satellite, donc on ne la touche pas)
             const mapsToUpdate = [mapHome, mapViz];
 
             mapsToUpdate.forEach(map => {
                 if (!map) return;
-
-                // 1. On supprime UNIQUEMENT les anciennes tuiles de fond (CartoDB)
                 map.eachLayer(layer => {
                     if (layer instanceof L.TileLayer && layer._url && layer._url.includes('cartocdn')) {
                         map.removeLayer(layer);
                     }
                 });
-
-                // 2. On crée une NOUVELLE instance unique pour cette carte précise
                 L.tileLayer(urlToUse).addTo(map);
             });
         }
@@ -605,14 +621,12 @@
                     const activeId = entry.target.id;
                     const dot = document.querySelector(`.dot[onclick*="${activeId}"]`);
                     if(dot) dot.classList.add('active');
-                    // Refresh carto pour éviter les gris
                     if(activeId === 'page2') { 
                         setTimeout(() => { mapLeft.invalidateSize(); mapRight.invalidateSize(); }, 200); 
                     }
                     if(activeId === 'page3') { 
                         setTimeout(() => { mapViz.invalidateSize(); }, 200); 
                     }
-
                 }
             });
         }, { threshold: 0.2 });
@@ -637,216 +651,131 @@
                 }
             }).addTo(mapHome);
 
-            // 🔑 LA CLÉ ABSOLUE
             mapHome.fitBounds(dep.getBounds(), {
                 padding: [40,40]
             });
-
-            // 🔧 sticky + scroll = recalcul obligatoire
             setTimeout(() => mapHome.invalidateSize(), 200);
         });
-// ---------------------------------------------------------
-        // --- 3. PAGE 2 : COMPARATEUR OSO vs COSIA (LE COEUR) ---
-        // ---------------------------------------------------------
 
-        // A. REGLAGES DE VUE (Zoom et Position)
-        // -------------------------------------
-        // J'ai mis le zoom à 16 (Vue rue/quartier).
-        // Ajuste les coordonnées [Lat, Long] si tu ne tombes pas pile sur ta zone.
+        // --- 3. PAGE 2 : COMPARATEUR ---
         var startCenter = [43.255, 2.368]; 
         var startZoom = 16; 
 
         var mapLeft = L.map('map-left', {zoomControl:false, attributionControl:false}).setView(startCenter, startZoom);
         var mapRight = L.map('map-right', {zoomControl:false, attributionControl:false}).setView(startCenter, startZoom);
 
-        // Fond Satellite (ESRI)
         var satUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
         L.tileLayer(satUrl).addTo(mapLeft);
         L.tileLayer(satUrl).addTo(mapRight);
 
-        // Synchronisation des mouvements (Gauche <-> Droite)
         mapLeft.on('move', () => mapRight.setView(mapLeft.getCenter(), mapLeft.getZoom(), {animate:false}));
         mapRight.on('move', () => mapLeft.setView(mapRight.getCenter(), mapRight.getZoom(), {animate:false}));
 
+        const C_ARTIF  = '#ec7a7a';
+        const C_AGRI   = '#F2CA27';
+        const C_NATURE = '#699a1c';
+        const C_EAU    = '#4A90E2';
+        const C_FORET  = '#835217';
 
-        // B. DEFINITION DES COULEURS (Palette du site)
-        // --------------------------------------------
-        const C_ARTIF  = '#ec7a7a'; // Rouge
-        const C_AGRI   = '#F2CA27'; // Jaune/Orange
-        const C_NATURE = '#699a1c'; // Vert
-        const C_EAU    = '#4A90E2'; // Bleu
-        const C_FORET = '#835217' ; // Marron (Forêt spécifique)
-
-
-        // C. STYLE POUR OSO (Gauche) - Basé sur les codes 1 à 23
-        // ------------------------------------------------------
         function styleOSO(feature) {
-            // "Classe" avec majuscule comme vu sur ta capture
             var code = feature.properties.Classe; 
-            var color = C_ARTIF; // Couleur par défaut
-
-            // Nomenclature OSO standard :
-            // 1-2 : Artificialisé
+            var color = C_ARTIF;
             if (code <= 2) color = C_ARTIF;
-            
-            // 11-16 : Agricole (Cultures, Vignes, Vergers...)
             else if (code >= 11 && code <= 16) color = C_AGRI;
-            
-            // 17-19 : Forêts + 3-6 (Landes/Herbacés) -> NATURE
             else if ((code >= 17 && code <= 19) || (code >= 3 && code <= 6)) color = C_NATURE;
-            
-            // 23 : Eau
             else if (code === 23) color = C_EAU;
-
             return { fillColor: color, weight: 1, color: color, fillOpacity: 0.6 };
         }
 
-
-        // D. STYLE POUR COSIA (Droite) - Basé sur les noms (Texte)
-        // --------------------------------------------------------
         function styleCOSIA(feature) {
-            // "classe" en minuscule comme vu sur ta capture
             var nom = feature.properties.classe;
-            var color = C_ARTIF; // Par défaut
+            var color = C_ARTIF;
+            if (!nom) return { opacity:0, fillOpacity:0 };
 
-            // On utilise "includes" pour attraper les variantes (ex: "Zone imperméable")
-            if (!nom) return { opacity:0, fillOpacity:0 }; // Sécurité si vide
-
-            // 1. ARTIFICIEL (Rouge)
-            if (nom.includes('imperméable') || 
-                nom.includes('Bâtiment') || 
-                nom.includes('Piscine') || 
-                nom.includes('Sol nu') ||
-                nom.includes('perméable')) { // Souvent "Zone perméable" = jardin urbain -> Artif dans OSO
+            if (nom.includes('imperméable') || nom.includes('Bâtiment') || nom.includes('Piscine') || nom.includes('Sol nu') || nom.includes('perméable')) {
                 color = C_ARTIF;
             }
-
-            // 2. AGRICOLE (Jaune)
-            if (nom.includes('Culture') || 
-                nom.includes('Vigne') || 
-                nom.includes('Terre labourée') || 
-                nom.includes('Serre')) {
+            if (nom.includes('Culture') || nom.includes('Vigne') || nom.includes('Terre labourée') || nom.includes('Serre')) {
                 color = C_AGRI;
             }
-
-            // 3. NATURE / FORET (Vert)
-            if (nom.includes('Feuillu') || 
-                nom.includes('Conifère') || 
-                nom.includes('Pelouse') || 
-                nom.includes('Broussaille')) {
+            if (nom.includes('Feuillu') || nom.includes('Conifère') || nom.includes('Pelouse') || nom.includes('Broussaille')) {
                 color = C_NATURE;
             }
-
-            // 4. EAU (Bleu)
             if (nom.includes('eau')) {
                 color = C_EAU;
             }
-
             return { fillColor: color, weight: 1, color: color, fillOpacity: 0.6 };
         }
 
-
-        // E. CHARGEMENT DES FICHIERS (MODIFIÉ POUR LE GZIP)
-        // --------------------------
         function loadLayer(url, mapInstance, styleFunc, name) {
-            fetchGeoJSON(url) // Utilisation de notre nouvelle fonction intelligente
+            fetchGeoJSON(url)
                 .then(data => {
                     L.geoJSON(data, { 
-                        style: styleFunc,
-                        onEachFeature: function(feature, layer) {
-                            // On enlève le bloc onEachFeature ou on le laisse vide
-                        }
+                        style: styleFunc
                     }).addTo(mapInstance);
                     console.log(name + " chargé !");
                 })
                 .catch(e => console.error("Erreur " + name, e));
         }
 
-        // Lancement (Vérifie bien que tes fichiers sont dans le dossier 'donne')
-        // ATTENTION : J'ai mis .gz pour COSIA car c'est celui que tu as compressé.
         loadLayer('donne/OSO_2023_DALLE_2.geojson', mapLeft, styleOSO, 'OSO');
         loadLayer('donne/COSIA_2024_DALLE_2.geojson.gz', mapRight, styleCOSIA, 'COSIA');
 
-        // CADASTRE (Transparence blanche)
         var styleCadastre = { color: '#FFFFFF', weight: 1, fill: false, opacity: 0.5 };
-        // Si tu n'as pas compressé le cadastre, laisse .geojson
-        // Si tu l'as compressé, change juste l'extension ici en .geojson.gz
         loadLayer('donne/CADASTRE_DALLE_2.geojson', mapLeft, styleCadastre, 'Cadastre');
         loadLayer('donne/CADASTRE_DALLE_2.geojson', mapRight, styleCadastre, 'Cadastre');
-       // ---------------------------------------------------------
-        // --- 4. PAGE 3 : DASHBOARD 5 CLASSES (FINAL) ---
-        // ---------------------------------------------------------
 
-        // ---------------------------------------------------------
-        // --- GESTION DES DONNÉES & PAGE 3/4 ---
-        // ---------------------------------------------------------
-
+        // --- 4. PAGE 3 ---
         var DALLE_ID_KEY = 'DALLE'; 
-        
-        // Stockage des deux datasets
-        var geoDataM1 = null; // Méthode 1
-        var geoDataM2 = null; // Méthode 2
-        
-        var globalGeoData = null; // Dataset actif
-        var currentMethod = 'm1'; // État actuel
-        
+        var geoDataM1 = null;
+        var geoDataM2 = null;
+        var globalGeoData = null;
+        var currentMethod = 'm1'; 
         var vizLayer = null;
         var activeFilters = { 'Eau': true, 'Nature': true, 'Forêt': true, 'Agri': true, 'Artif': true };
 
-        // 1. CHARGEMENT SIMULTANÉ DES DEUX FICHIERS (MODIFIÉ POUR LE GZIP)
         Promise.all([
-            fetchGeoJSON('donne/GLOBAL_DALLES.geojson'), // Mets .gz ici si tu le compresses plus tard
-            fetchGeoJSON('donne/METHODE_2.geojson')      // Mets .gz ici si tu le compresses plus tard
+            fetchGeoJSON('donne/GLOBAL_DALLES.geojson'),
+            fetchGeoJSON('donne/METHODE_2.geojson')
         ])
         .then(([dataM1, dataM2]) => {
             geoDataM1 = dataM1;
             geoDataM2 = dataM2;
             globalGeoData = geoDataM1; 
 
-            // Init Menu Page 3
             populateDalleSelector(geoDataM1, 'dalleSelector');
     
-         // Forcer la sélection de la première dalle disponible
             const selector = document.getElementById('dalleSelector');
             if(selector && selector.options.length > 0) {
-                // On attend un tout petit peu que le DOM Leaflet soit stable
                 setTimeout(() => {
                     selector.selectedIndex = 0;
                     updatePage3(selector.value);
-                    mapViz.invalidateSize(); // Force le rafraîchissement
+                    mapViz.invalidateSize();
                 }, 300);
             }
 
-    // Init Page 4
             populateDalleSelector(geoDataM1, 'p4-dalleSelector', true);
             updatePage4_Top('all');
             updatePage4_Bottom('all');
         })
         .catch(e => console.error("Erreur chargement :", e));
 
-        // --- 2. FONCTIONS COMMUNES (DONT POPULATEDALLESELECTOR) ---
-
-        // C'est la fonction qui manquait !
         function populateDalleSelector(data, id, allOpt=false) {
             var s = document.getElementById(id); 
             if(!s) return;
-            
-            s.innerHTML = ""; // On vide le select
-            
+            s.innerHTML = "";
             if(allOpt) {
                 var oAll = document.createElement('option'); 
                 oAll.value = "all"; 
                 oAll.innerText = "Vue Globale";
                 s.appendChild(oAll);
             }
-            
             var d = new Set();
             if(data && data.features) {
                 data.features.forEach(f => { 
                     if(f.properties[DALLE_ID_KEY]) d.add(f.properties[DALLE_ID_KEY]); 
                 });
             }
-            
             Array.from(d).sort((a,b)=>a-b).forEach(v => {
                 var o = document.createElement('option'); 
                 o.value = v; 
@@ -873,29 +802,16 @@
             }
         }
 
-        // --- 3. PAGE 3 : CARTE INTERACTIVE ---
         var mapViz = L.map('map-viz', {zoomControl:false}).setView([43.212, 2.355], 13);
         L.tileLayer(URL_LIGHT).addTo(mapViz);
 
-
-
-
-        // FONCTION DE BASCULE (SWITCH)
         function switchMethod(m) {
             currentMethod = m;
-            
-            // UI Boutons
             document.getElementById('btn-m1').className = m==='m1'?'method-btn active':'method-btn';
             document.getElementById('btn-m2').className = m==='m2'?'method-btn active':'method-btn';
-            
-            // Swap Data
             globalGeoData = (m === 'm1') ? geoDataM1 : geoDataM2;
-            
-            // Gestion Fiches (Sources off en M2)
             document.getElementById('card-sources').style.display = m==='m1' ? 'flex' : 'none';
             document.getElementById('title-conf').innerText = m==='m1' ? 'Indice de Confiance' : 'Score Final';
-
-            // Refresh P3 & P4 (Pour mettre à jour les données affichées)
             var curDalle = document.getElementById('dalleSelector').value;
             if(curDalle) updatePage3(curDalle); 
         }
@@ -908,36 +824,24 @@
 
         function updatePage3(dalleID) {
             if(!globalGeoData || !dalleID) return;
- 
             document.getElementById('dashTitle').innerText = "Analyse Dalle " + dalleID;
- 
             var filtered = globalGeoData.features.filter(f => String(f.properties[DALLE_ID_KEY]) === String(dalleID));
- 
             if (vizLayer) mapViz.removeLayer(vizLayer);
- 
             vizLayer = L.geoJSON({type:"FeatureCollection", features:filtered}, { 
-                style: styleFeatureP3,
-                onEachFeature: function(feature, layer) {
-                    // On enlève le bloc onEachFeature ou on le laisse vide
-                }
+                style: styleFeatureP3
             }).addTo(mapViz);
 
             if(filtered.length > 0) {
                 mapViz.fitBounds(vizLayer.getBounds(), { padding: [20, 20] });
             }
- 
-            // Important : On force le recalcul de la taille au cas où le conteneur était caché
             mapViz.invalidateSize();
-
             var stats = calculateStatsP3(filtered);
             renderChartP3('chart-confiance', stats, 'conf');
             if(currentMethod === 'm1') renderChartP3('chart-sources', stats, 'src');
         }
 
         function styleFeatureP3(f) {
-            // CORRECTION ICI : 'CLASSIFICATION_FINAL' (sans E)
             var colName = currentMethod === 'm1' ? 'CLASSE_FINALE' : 'CLASSIFICATION_FINAL';
-            
             var cat = detectCategory(f.properties[colName]);
             if(!activeFilters[cat]) return {opacity:0, fillOpacity:0};
             var c = getCategoryColor(cat);
@@ -946,33 +850,18 @@
 
         function calculateStatsP3(features) {
             var grp = {};
-            
-            // 1. Choix de la colonne CLASSE (Attention au "FINAL" sans E pour la méthode 2)
             var colClass = currentMethod === 'm1' ? 'CLASSE_FINALE' : 'CLASSIFICATION_FINAL';
-            
-            // 2. Choix de la colonne SCORE (C'est ici qu'on corrige !)
-            // M1 -> INDICE_CONFIANCE_FINAL | M2 -> SCORE_CONFIANCE
             var colScore = currentMethod === 'm1' ? 'INDICE_CONFIANCE_FINAL' : 'SCORE_CONFIANCE';
 
             features.forEach(f => {
                 var p = f.properties;
-                
-                // On récupère la catégorie
                 var cat = detectCategory(p[colClass]);
-                
-                // Init du groupe si inexistant
                 if(!grp[cat]) grp[cat] = {c:0, sConf:0, sSrc:0, color:getCategoryColor(cat)};
-                
                 grp[cat].c++;
-                
-                // --- RECUPERATION DU SCORE ---
                 var val = p[colScore];
-                // Petite sécurité : si c'est du texte avec virgule (ex: "95,5"), on remplace par point
                 if(typeof val === 'string') val = parseFloat(val.replace(',','.'));
-                
                 grp[cat].sConf += (val || 0);
 
-                // --- RECUPERATION DES SOURCES (Uniquement pour M1) ---
                 if(currentMethod === 'm1') {
                     var valSrc = p.NB_SOURCES_ACCORD;
                     if(typeof valSrc === 'string') valSrc = parseFloat(valSrc.replace(',','.'));
@@ -980,7 +869,6 @@
                 }
             });
             
-            // Calcul des moyennes finales
             return Object.keys(grp).map(k=>({
                 label:k, 
                 color:grp[k].color,
@@ -999,128 +887,70 @@
         }
         function activateDeck(el) { document.querySelectorAll('.deck-card').forEach(c=>c.classList.remove('active')); el.classList.add('active'); }
 
-
-        // =========================================================
-        // 6. PAGE 4 : TREEMAPS (HAUT = M1, BAS = M2)
-        // =========================================================
-
-        // --- PARTIE HAUTE : MÉTHODE 1 (CLASSE_FINALE) ---
+        // --- 6. PAGE 4 : TREEMAPS ---
         function updatePage4_Top(targetDalle) {
-            // On force l'utilisation de geoDataM1
             if(!geoDataM1) return; 
             if(!targetDalle) targetDalle = document.getElementById('p4-dalleSelector').value;
-
-            // Stats M1
             var stats = { 'Eau':{area:0,c:0,col:'#4A90E2'}, 'Nature':{area:0,c:0,col:'#699a1c'}, 'Forêt':{area:0,c:0,col:'#835217'}, 'Agri':{area:0,c:0,col:'#F2CA27'}, 'Artif':{area:0,c:0,col:'#ec7a7a'} };
             var totalArea = 0;
-
             geoDataM1.features.forEach(f => {
                 if(targetDalle !== 'all' && String(f.properties[DALLE_ID_KEY]) !== String(targetDalle)) return;
-                
-                // M1 utilise CLASSE_FINALE
                 var cat = detectCategory(f.properties['CLASSE_FINALE']);
                 var area = getApproxArea(f.geometry);
                 if(stats[cat]) { stats[cat].area += area; stats[cat].c++; totalArea += area; }
             });
-
             drawTreemap(stats, totalArea, 'treemap-container', 'treemap-legend');
         }
 
-        // --- PARTIE BASSE : MÉTHODE 2 (CLASSIFICATION_FINAL) ---
         function updatePage4_Bottom(targetDalle) {
-            // On force l'utilisation de geoDataM2
             if(!geoDataM2) return;
-            // On utilise le même sélecteur de dalle pour que les deux graphiques bougent ensemble
             if(!targetDalle) targetDalle = document.getElementById('p4-dalleSelector').value;
-
-            // Stats M2
             var stats = { 'Eau':{area:0,c:0,col:'#4A90E2'}, 'Nature':{area:0,c:0,col:'#699a1c'}, 'Forêt':{area:0,c:0,col:'#835217'}, 'Agri':{area:0,c:0,col:'#F2CA27'}, 'Artif':{area:0,c:0,col:'#ec7a7a'} };
             var totalArea = 0;
-
             geoDataM2.features.forEach(f => {
                 if(targetDalle !== 'all' && String(f.properties[DALLE_ID_KEY]) !== String(targetDalle)) return;
-                
-                // M2 utilise CLASSIFICATION_FINAL (sans E)
                 var cat = detectCategory(f.properties['CLASSIFICATION_FINAL']);
                 var area = getApproxArea(f.geometry);
                 if(stats[cat]) { stats[cat].area += area; stats[cat].c++; totalArea += area; }
             });
-
             drawTreemap(stats, totalArea, 'treemap-container-2', 'treemap-legend-2');
         }
 
-        // --- FONCTION DE DESSIN COMMUNE ---
-        // --- FONCTION DE DESSIN TREEMAP STYLE "PUZZLE" ---
         function drawTreemap(stats, totalArea, containerId, legendId) {
             var cont = document.getElementById(containerId); 
             var leg = document.getElementById(legendId);
             if(!cont || !leg) return;
-
-            // 1. Reset et Style du conteneur (IMPORTANT pour le positionnement)
             cont.innerHTML = ""; 
             leg.innerHTML = "";
-            cont.style.position = "relative"; // Nécessaire pour les blocs absolus
+            cont.style.position = "relative"; 
 
             if(totalArea === 0) { 
                 cont.innerHTML="<p style='padding:20px; color:#999;'>Aucune donnée</p>"; 
                 return; 
             }
 
-            // 2. Préparation des données (Tri : du plus gros au plus petit)
             var items = Object.keys(stats)
                 .map(k => ({ k: k, ...stats[k], pct: (stats[k].area / totalArea) * 100 }))
                 .sort((a,b) => b.pct - a.pct);
 
-            // 3. Algorithme de découpe récursive (Puzzle)
-            // On définit un rectangle virtuel de 0 à 100%
             var x = 0, y = 0, w = 100, h = 100;
-            var remainingArea = totalArea; // Surface restante à placer
+            var remainingArea = totalArea; 
 
             items.forEach(item => {
-                // Même si la surface est minuscule, on la traite
                 if(item.area <= 0) return;
-
-                // Calcul de la part relative dans l'espace RESTANT
-                // Ex: Si Agri prend 50% du total, il prend 50% de l'espace restant au début.
-                // Ensuite, Forêt prend 30% du total, mais peut-être 60% de l'espace qu'il reste.
                 var share = item.area / remainingArea; 
-                
-                // Sécurité mathématique (ne devrait pas arriver mais on blinde)
                 if(share > 1) share = 1;
-
                 var boxW, boxH, boxX, boxY;
-
-                // LOGIQUE "SMART CUT" : On coupe toujours perpendiculairement au côté le plus long
-                // pour éviter les rectangles trop fins (bandelettes).
                 if (w >= h) {
-                    // Plus large que haut -> Coupe Verticale (Gauche vers Droite)
-                    boxW = w * share;
-                    boxH = h;
-                    boxX = x;
-                    boxY = y;
-                    
-                    // On avance le curseur X et on réduit la largeur restante
-                    x += boxW;
-                    w -= boxW;
+                    boxW = w * share; boxH = h; boxX = x; boxY = y;
+                    x += boxW; w -= boxW;
                 } else {
-                    // Plus haut que large -> Coupe Horizontale (Haut vers Bas)
-                    boxW = w;
-                    boxH = h * share;
-                    boxX = x;
-                    boxY = y;
-                    
-                    // On avance le curseur Y et on réduit la hauteur restante
-                    y += boxH;
-                    h -= boxH;
+                    boxW = w; boxH = h * share; boxX = x; boxY = y;
+                    y += boxH; h -= boxH;
                 }
-
-                // Mise à jour de la surface restante pour le prochain tour
                 remainingArea -= item.area;
 
-                // 4. Affichage (HTML)
-                // Seuil d'affichage du texte : on ne l'affiche que si le bloc est assez gros (>3%)
                 var hideText = item.pct < 3 ? 'display:none' : '';
-                // Taille de police adaptative
                 var fSize = item.pct < 10 ? '0.75rem' : '1.1rem';
 
                 cont.innerHTML += `
@@ -1133,7 +963,7 @@
                                 display:flex; flex-direction:column; justify-content:center; align-items:center; 
                                 color:white; overflow:hidden; transition:0.2s;">
                         
-                        <div style="${hideText}; font-weight:700; font-size:${fSize}; text-shadow:0 1px 2px rgba(0,0,0,0.2); text-align:center; line-height:1.1;">
+                        <div style="${hideText}; font-weight:700; font-size:${fSize}; text-shadow:0 1px 2px rgba(0,0,0,0.2); text-align:center; line-height:1.2;">
                             ${item.k}
                         </div>
                         <div style="${hideText}; font-size:${fSize}; opacity:0.9;">
@@ -1141,7 +971,6 @@
                         </div>
                     </div>`;
 
-                // 5. Légende (Toujours complète, même pour l'eau à 0%)
                 leg.innerHTML += `
                     <div style="display:flex; align-items:center; gap:8px; background:var(--bg-soft); padding:6px 12px; border-radius:20px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
                         <div style="width:10px; height:10px; background:${item.col}; border-radius:50%;"></div>
@@ -1155,7 +984,6 @@
             });
         }
 
-        // OUTILS MATHS
         function getApproxArea(g) {
             if(!g||!g.coordinates) return 0;
             if(g.type==='Polygon') return polygonArea(g.coordinates[0]);
@@ -1174,19 +1002,12 @@
             Foret:  getComputedStyle(document.documentElement).getPropertyValue('--c-foret').trim()
         };
 
-       function toggleNight() {
+        function toggleNight() {
             document.body.classList.toggle('night');
-
-            localStorage.setItem(
-                'theme',
-                document.body.classList.contains('night') ? 'night' : 'day'
-            );
-
+            localStorage.setItem('theme', document.body.classList.contains('night') ? 'night' : 'day');
             updateLeafletTheme();
         }
 
-
-        /* Restauration au chargement */
         (function () {
             if (localStorage.getItem('theme') === 'night') {
                 document.body.classList.add('night');
