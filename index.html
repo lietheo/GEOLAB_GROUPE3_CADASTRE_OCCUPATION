@@ -214,14 +214,13 @@
     .filter-btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
     .filter-btn.inactive { opacity: 0.5; filter: grayscale(1); box-shadow: none; }
 
-    /* --- DECK / SLIDER DE GRAPHIQUES --- */
-    /* Modification: Position relative pour contenir les cartes absolues */
+    /* --- DECK / SLIDER DE GRAPHIQUES (CORRIGÉ) --- */
     .deck-container { 
         position: relative; 
         height: 380px; 
         width: 100%; 
         display: flex; 
-        justify-content: center; /* Centre les cartes */
+        justify-content: center;
         align-items: center; 
         perspective: 1000px;
         margin-top: 30px;
@@ -247,7 +246,6 @@
         box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
     }
     
-    /* Hover sur la carte arrière pour inviter au clic */
     .deck-card:not(.active):hover {
         transform: translateX(50px) scale(0.94) translateZ(-40px);
         opacity: 0.9;
@@ -265,9 +263,8 @@
     }
 
     .deck-header { padding: 20px 30px; background: #FFF; border-bottom: 1px solid #F1F5F9; border-radius: 20px 20px 0 0; }
-    .deck-title { 
-        font-weight: 800; color: var(--color-dark); font-size: 1.2rem; line-height: 1.4;
-    }
+    .deck-title { font-weight: 800; color: var(--color-dark); font-size: 1.2rem; line-height: 1.4; }
+    
     .chart-content { 
         flex: 1; padding: 30px; opacity: 0; transition: 0.3s; 
         display: flex; flex-direction: column; gap: 12px;
@@ -281,7 +278,7 @@
     .chart-fill { height: 100%; border-radius: 10px; }
     .chart-val { width: 50px; text-align: right; font-weight: 800; color: var(--color-dark); }
 
-    /* FLÈCHES DE NAVIGATION POUR LE GRAPHIQUE */
+    /* FLÈCHES DE NAVIGATION */
     .deck-nav-btn {
         position: absolute; top: 50%; transform: translateY(-50%);
         width: 40px; height: 40px; border-radius: 50%;
@@ -310,10 +307,7 @@
 
     .treemap-section { width: 100%; margin-bottom: 40px; }
     .treemap-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #E2E8F0; }
-    .treemap-title { 
-        font-family: 'Playfair Display'; font-size: 1.5rem; color: var(--color-dark); margin: 0;
-        line-height: 1.4; padding-bottom: 4px;
-    }
+    .treemap-title { font-family: 'Playfair Display'; font-size: 1.5rem; color: var(--color-dark); margin: 0; line-height: 1.4; padding-bottom: 4px; }
     
     .tm-container { 
         width: 100%; height: 240px; display: flex; border-radius: 16px; overflow: hidden; 
@@ -363,7 +357,7 @@
         height: 100%; width: 100%; background: #ebe7e0;
     }
 
-    /* Style spécifique pour empêcher le numéro de Dalle de tomber */
+    /* Style spécifique pour le numéro de Dalle */
     .dalle-number { white-space: nowrap; }
 
 </style>
@@ -519,7 +513,7 @@
                             </p>
                         </div>
 
-                        <div class="deck-container" style="height: 350px; margin-top:30px;">
+                        <div class="deck-container">
                             <div class="deck-nav-btn deck-prev" id="nav-prev" onclick="toggleCard()">
                                 <i class="fas fa-chevron-left"></i>
                             </div>
@@ -863,11 +857,18 @@
             document.getElementById('btn-m2').className = m==='m2'?'method-btn active':'method-btn';
             globalGeoData = (m === 'm1') ? geoDataM1 : geoDataM2;
             
-            // Logique de visibilité des cartes ET des flèches
+            // Logique de visibilité (Cartes et Flèches)
             var displayVal = m==='m1' ? 'flex' : 'none';
             document.getElementById('card-sources').style.display = displayVal;
             document.getElementById('nav-prev').style.display = displayVal;
             document.getElementById('nav-next').style.display = displayVal;
+            
+            // Logique de Correction Méthode 2
+            if (m === 'm2') {
+                var cards = document.querySelectorAll('.deck-card');
+                cards.forEach(c => c.classList.remove('active'));
+                document.getElementById('card-conf').classList.add('active');
+            }
             
             var curDalle = document.getElementById('dalleSelector').value;
             if(curDalle) updatePage3(curDalle); 
@@ -881,7 +882,6 @@
 
         function updatePage3(dalleID) {
             if(!globalGeoData || !dalleID) return;
-            // Mise à jour ciblée du numéro pour ne pas faire sauter le style
             document.getElementById('dalleNum').innerText = dalleID;
             
             var filtered = globalGeoData.features.filter(f => String(f.properties[DALLE_ID_KEY]) === String(dalleID));
@@ -945,21 +945,15 @@
             });
         }
 
-        // --- NOUVELLE FONCTION DE NAVIGATION (FLÈCHES + CLIC) ---
         function activateDeck(el) {
-            // Si on clique sur une carte, on l'active
             var cards = document.querySelectorAll('.deck-card');
             cards.forEach(c => c.classList.remove('active'));
             el.classList.add('active');
         }
 
         function toggleCard() {
-            // Fonction utilisée par les flèches : inverse simplement l'état
             var cards = document.querySelectorAll('.deck-card');
-            // Si on est en méthode 2 (une seule carte), on ne fait rien
-            if(currentMethod === 'm2') return;
-
-            // Simple logique de bascule pour 2 cartes
+            if(currentMethod === 'm2') return; 
             if(cards[0].classList.contains('active')) {
                 cards[0].classList.remove('active');
                 cards[1].classList.add('active');
