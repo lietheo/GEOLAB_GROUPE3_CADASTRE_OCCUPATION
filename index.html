@@ -419,14 +419,14 @@
                 <div class="text-block">
                     <h3>Le Défi de la Donnée</h3>
                     <p>
-                        Les référentiels actuels (OSO, RPG) présentent des limites à l'échelle parcellaire : décalage temporel, confusion entre "couvert" et "usage", et imprécisions géométriques.
+                        Les référentiels actuels (OSO, COSIA, RGP, BD TOPO etc..) présentent des limites à l'échelle parcellaire : décalage temporel, confusion entre "couvert" et "usage", et imprécisions géométriques.
                         <br><br>
                         <strong>Notre objectif :</strong> Croiser ces sources hétérogènes (Télédétection + Données Métier) pour produire une classification <span class="highlight">plus robuste, automatisée et précise</span>.
                     </p>
                 </div>
                 
                 <div style="margin-top:20px; color:var(--color-vivid); font-weight:700; font-size:0.9rem; display:flex; align-items:center; gap:10px;">
-                    SCROLLEZ POUR DÉCOUVRIR L'ALGORITHME <i class="fas fa-arrow-down"></i>
+                    SCROLLEZ POUR DÉCOUVRIR LA SUITE <i class="fas fa-arrow-down"></i>
                 </div>
 
             </div>
@@ -442,16 +442,16 @@
                     <h2>L'importance<br>de résolution.</h2>
                     
                     <div class="context-box">
-                        <div class="context-title"><i class="fas fa-exclamation-triangle"></i> Le Conflit Usage vs Couverture</div>
+                        <div class="context-title"><i class="fas fa-exclamation-triangle"></i> Le conflit d'occupation</div>
                         <p class="context-text">
                             Les bases de données actuelles divergent souvent. 
-                            <strong>L'OSO (Gauche)</strong> détecte la couverture biophysique (ex: de l'herbe), tandis que <strong>COSIA (Droite)</strong> intègre des données métiers pour comprendre l'usage réel (ex: un jardin privé est "naturel" visuellement, mais "artificialisé" fonctionnellement).
+                            <strong>L'OSO (Gauche)</strong> détecte la couverture biophysique (ex: de l'herbe), tandis que <strong>COSIA (Droite)</strong> intègre des données métiers pour comprendre l'occupation réel.
                         </p>
                     </div>
 
                     <p class="description-text">
-                        Dans cet exemple (Parcelle 95), la méthode standard classifie la zone en <strong style="color:var(--c-artif)">ARTIFICIALISÉ</strong> à cause de la proximité du bâti. 
-                        Notre algorithme correctif, croisant RPG et Télédétection, la réaffecte correctement en <strong style="color:var(--c-nature)">NATURE</strong>, modifiant ainsi le calcul final de l'artificialisation du territoire.
+                        Par exemple (Parcelle 95), la méthode d'OSO classifie la zone en <strong style="color:var(--c-artif)">ARTIFICIALISÉ</strong> à cause de la proximité du bâti et son lissage. 
+                        En comparaison, COSIA la réaffecte correctement en <strong style="color:var(--c-nature)">NATURE</strong>, modifiant ainsi l'occupation avec un lissage faible mais plus de bruits.
                     </p>
 
                     <div class="legend-box" style="margin-top: 30px;">
@@ -463,10 +463,10 @@
 
                 <div class="viz-panel" style="display:flex;">
                     <div id="map-left" class="map-split">
-                        <div class="map-badge-pill">OSO 2023 <span>(Couverture)</span></div>
+                        <div class="map-badge-pill">OSO <span>(2023)</span></div>
                     </div>
                     <div id="map-right" class="map-split">
-                        <div class="map-badge-pill">COSIA 2024 <span>(Correction IA)</span></div>
+                        <div class="map-badge-pill">COSIA <span>(24)</span></div>
                     </div>
                 </div>
             </div>
@@ -529,7 +529,7 @@
                             <div class="deck-card" onclick="activateDeck(this)" id="card-sources">
                                 <div class="deck-header">
                                     <div class="deck-title">Consensus Sources</div>
-                                    <span style="font-size:0.7rem; color:#888;">RPG + OSO + BD TOPO</span>
+                                    <span style="font-size:0.7rem; color:#888;">OSO + COSIA + RPG + BD TOPO + BD FORET </span>
                                 </div>
                                 <div class="chart-content" id="chart-sources">
                                     <p style="font-size:0.8rem; color:#999;">Analyse de la concordance entre les différentes bases de données administratives pour chaque parcelle.</p>
