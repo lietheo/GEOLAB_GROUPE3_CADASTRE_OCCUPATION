@@ -20,7 +20,7 @@
             --c-agri: #F2CA27; 
             --c-nature: #699a1c; 
             --c-water: #4A90E2; 
-            --c-foret: #835217; /* Renommé en Bois dans l'affichage uniquement */
+            --c-bois: #835217; /* Renommé en Bois */
             
             --color-primary: #F97316; /* Orange Aude */
             
@@ -240,20 +240,16 @@
         </div>
 
         <div style="margin-bottom:25px;">
-            <h4 style="margin:0 0 10px 0; text-transform:uppercase; font-size:0.8rem; color:#94A3B8;">Méthode 1 (Score par classe)</h4>
+            <h4 style="margin:0 0 10px 0; text-transform:uppercase; font-size:0.8rem; color:#94A3B8;">Méthode 1 (Standard)</h4>
             <p style="line-height:1.6; font-size:0.95rem; margin:0; color:#E2E8F0;">
                 Cette approche repose sur une <strong>fusion des indicateurs</strong> de chaque source via des scores calculés pour chaque classe. La classe obtenant le score le plus élevé est retenue pour qualifier la parcelle.
             </p>
         </div>
 
         <div>
-            <h4 style="margin:0 0 10px 0; text-transform:uppercase; font-size:0.8rem; color:#94A3B8;">Méthode 2 (Arbre de décision)</h4>
+            <h4 style="margin:0 0 10px 0; text-transform:uppercase; font-size:0.8rem; color:#94A3B8;">Méthode 2 (Avancée)</h4>
             <p style="line-height:1.6; font-size:0.95rem; margin:0; color:#E2E8F0;">
-                Classification procédant par étapes logiques, à la manière d'un <strong>Arbre de décision</strong> :
-            <br><br>
-            • <strong>Le Tronc</strong> : Comparaison initiale des sources satellites (OSO et COSIA).<br>
-            • <strong>Les Branches</strong> : En cas de doute, arbitrage via des données métiers (RPG, BD TOPO...).<br>
-            • <strong>Les Feuilles</strong> : Sélection de la classe finale et calcul du <strong>score de confiance</strong>.
+                Une approche expérimentale couplant l'analyse géométrique des parcelles (circularité, superficie) à des modèles d'<strong>apprentissage profond (IA)</strong> sur imagerie aérienne pour corriger les incohérences topologiques.
             </p>
         </div>
 
@@ -351,7 +347,7 @@
                         <div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:8px; margin: 25px 0 10px 0; border:1px solid var(--border-glass);">
                             <p style="font-size:0.8rem; color:var(--text-muted); margin:0; line-height:1.6;">
                                 <i class="fas fa-chart-line" style="color:var(--color-primary); margin-right:8px;"></i>
-                                <strong>Interprétation :</strong> Le graphique ci-dessous illustre le différentiel de classification. Une barre verte indique un gain en M2, une barre rouge indique une perte.
+                                <strong>Interprétation :</strong> Le graphique ci-dessous illustre le différentiel de classification. Une barre verte (vers la droite) indique un gain en M2, une barre rouge (vers la gauche) indique une perte.
                             </p>
                     </div>
                         <div class="comparison-box">
@@ -517,7 +513,15 @@
             document.getElementById('btn-m1').className = m==='m1'?'m-btn active':'m-btn';
             document.getElementById('btn-m2').className = m==='m2'?'m-btn active':'m-btn';
             displayLayer(m === 'm1' ? geoDataM1 : geoDataM2);
-            if(selectedDalleId) showStatsForDalle(selectedDalleId, selectedFeature);
+            
+            // CORRECTION IMPORTANTE : Si une parcelle était sélectionnée, on la garde affichée
+            if(selectedFeature && selectedDalleId) {
+                // On cherche la même parcelle dans le nouveau dataset
+                // On utilise une clé unique si dispo (ex: ID_PARCEL) ou on essaie de matcher grossièrement
+                // Ici on garde simplement l'affichage global de la dalle, car l'ID peut varier entre M1/M2
+                // Mais on réaffiche les stats de la dalle
+                showStatsForDalle(selectedDalleId, null); // On perd le focus précis parcelle pour éviter les bugs ID, mais on garde la dalle
+            }
         }
 
         // 5. PANNEAU & STATS
