@@ -205,23 +205,23 @@
         .satellite-card { width: 100%; height: 300px; border-radius: 12px; overflow: hidden; position: relative; border: 2px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .hidden { display: none !important; }
         
-        /* Force l'affichage au démarrage */
+        /* CSS MODIFIÉ : Display Block par défaut pour afficher à l'arrivée */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 2999; display: block; }
         .info-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; background: #1E293B; padding: 40px; border-radius: 24px; z-index: 3000; display: block; color:white; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
     </style>
 </head>
 <body>
 
-    <div class="modal-overlay" onclick="toggleInfo()"></div>
-    <div class="info-modal" id="infoModal">
+    <div class="modal-overlay" onclick="toggleInfo()" style="display:block"></div>
+    <div class="info-modal" id="infoModal" style="display:block">
         <h2 style="font-family:'Playfair Display'; margin-top:0; color:var(--color-primary); font-size:2rem; margin-bottom:20px;">Guide & Méthode</h2>
         
         <div style="margin-bottom:25px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:20px;">
-            <h4 style="margin:0 0 10px 0; text-transform:uppercase; font-size:0.8rem; color:#94A3B8;">Comment utiliser ?</h4>
+            <h4 style="margin:0 0 10px 0; text-transform:uppercase; font-size:0.8rem; color:#94A3B8;">Tutoriel Rapide</h4>
             <ul style="padding-left:20px; color:#E2E8F0; font-size:0.95rem; line-height:1.6; margin:0;">
                 <li style="margin-bottom:8px;"><strong>1. Sélectionner :</strong> Cliquez sur une dalle (carré) sur la carte.</li>
-                <li style="margin-bottom:8px;"><strong>2. Analyser :</strong> Le panneau de droite affiche les stats. Cliquez sur une parcelle précise pour voir sa classe.</li>
-                <li><strong>3. Comparer :</strong> Utilisez les boutons "Méthode 1/2" en haut pour voir les différences.</li>
+                <li style="margin-bottom:8px;"><strong>2. Analyser :</strong> Le panneau de droite s'ouvre. Cliquez sur une parcelle précise pour le détail.</li>
+                <li><strong>3. Comparer :</strong> Utilisez les boutons "Méthode 1 / Méthode 2" pour voir les changements.</li>
             </ul>
         </div>
         
@@ -488,29 +488,32 @@
             }).addTo(map);
         }
 
+        // --- ICI LA CORRECTION PRINCIPALE : GESTION DES CLÉS ---
         function switchMethod(m) {
             currentMethod = m;
             document.getElementById('btn-m1').className = m==='m1'?'m-btn active':'m-btn';
             document.getElementById('btn-m2').className = m==='m2'?'m-btn active':'m-btn';
             
-            // On charge le jeu de données cible
+            // 1. Charger les nouvelles données
             var targetData = m === 'm1' ? geoDataM1 : geoDataM2;
             displayLayer(targetData);
             
-            // CORRECTION: Si une dalle/parcelle était sélectionnée, on essaie de la retrouver dans le nouveau fichier
+            // 2. Si une dalle/parcelle était déjà sélectionnée
             if(selectedDalleId) {
-                var newFeature = null;
-                // Si une parcelle précise était cliquée
+                
+                // Si une parcelle (feature) précise était sélectionnée, on cherche sa JUMELLE dans le nouveau fichier
                 if(selectedFeature) {
-                    // On cherche une feature avec le même ID (NUMERO ou id) dans le nouveau dataset
-                    var oldId = selectedFeature.properties.NUMERO || selectedFeature.properties.id;
+                    var oldId = selectedFeature.properties.NUMERO || selectedFeature.properties.id; // La Clé !
                     if(oldId) {
-                        newFeature = targetData.features.find(f => (f.properties.NUMERO || f.properties.id) === oldId);
+                        // On cherche dans targetData la feature qui a le même ID
+                        var newFeature = targetData.features.find(f => (f.properties.NUMERO || f.properties.id) === oldId);
+                        if(newFeature) {
+                            selectedFeature = newFeature; // On remplace par la nouvelle version
+                        }
                     }
                 }
-                // Si on a trouvé la correspondante, on met à jour selectedFeature, sinon on vide la sélection parcelle (mais on garde la dalle)
-                selectedFeature = newFeature; 
                 
+                // 3. On rafraichit l'affichage avec la nouvelle feature (ou null si pas trouvée)
                 showStatsForDalle(selectedDalleId, selectedFeature);
                 if(selectedFeature) updateMiniMap(selectedFeature);
             }
