@@ -427,7 +427,7 @@
             Array.from(dalles).sort((a,b)=>a-b).forEach(d => {
                 var opt = document.createElement('option'); 
                 opt.value = d; 
-                opt.innerText = "Dalle " + d;
+                opt.innerText = d;
                 select.appendChild(opt);
             });
         }
