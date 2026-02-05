@@ -158,20 +158,45 @@
 
         .stat-group { margin-bottom: 18px; }
         .stat-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem; }
-        .stat-label { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text-main); }
+        .stat-label { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text-main); width: 120px; flex-shrink: 0; }
         .stat-dot { width: 8px; height: 8px; border-radius: 50%; }
-        .progress-track { width: 100%; height: 6px; background: var(--border-glass); border-radius: 3px; overflow: hidden; }
+        
+        /* Barre de progression alignée correctement */
+        .progress-track { flex: 1; height: 6px; background: var(--border-glass); border-radius: 3px; overflow: hidden; margin-top: 6px; }
         .progress-fill { height: 100%; border-radius: 3px; }
-        .stat-details { display: flex; justify-content: space-between; margin-top: 5px; font-size: 0.75rem; color: var(--text-muted); }
+        
+        .stat-details { display: flex; justify-content: space-between; margin-top: 5px; font-size: 0.75rem; color: var(--text-muted); margin-left: 130px; }
         .badge { padding: 2px 8px; border-radius: 4px; font-weight: 700; border: 1px solid var(--border-glass); font-size: 0.65rem; }
         .badge-ia { color: #EAB308; border-color: rgba(234, 179, 8, 0.3); background: rgba(234, 179, 8, 0.1); }
 
+        /* --- CORRECTION GRAPHIQUE COMPARATIF (AXE CENTRÉ) --- */
         .comparison-box { margin-top: 10px; }
         .comp-row { display: flex; align-items: center; height: 28px; font-size: 0.8rem; margin-top:12px; }
-        .comp-lbl { width: 100px; color: var(--text-muted); font-weight: 600; }
-        .comp-track { flex: 1; height: 100%; display: flex; align-items: center; position: relative; border-left: 1px solid var(--border-glass); margin: 0 15px; }
-        .comp-bar { height: 6px; position: absolute; top: 50%; transform: translateY(-50%); border-radius: 10px; }
-        .comp-val { width: 80px; text-align: right; font-weight: 700; }
+        .comp-lbl { width: 100px; color: var(--text-muted); font-weight: 600; flex-shrink: 0; } 
+        
+        .comp-track { 
+            flex: 1; 
+            height: 100%; 
+            position: relative; 
+            margin: 0 15px; 
+        }
+        
+        /* Axe central */
+        .comp-track::before {
+            content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; 
+            background: var(--border-glass); z-index: 0;
+        }
+
+        .comp-bar { 
+            height: 6px; 
+            position: absolute; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            border-radius: 10px; 
+            z-index: 1;
+        }
+        
+        .comp-val { width: 80px; text-align: right; font-weight: 700; flex-shrink: 0; }
         .trend-pos { color: #84CC16; } .trend-neg { color: #EF4444; }
 
         .pure-legend-item { display: flex; align-items: center; gap: 12px; color: var(--text-muted); margin-bottom: 10px; font-size: 0.95rem; font-weight: 500; }
@@ -298,7 +323,7 @@
                         <div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:8px; margin: 25px 0 10px 0; border:1px solid var(--border-glass);">
                             <p style="font-size:0.8rem; color:var(--text-muted); margin:0; line-height:1.6;">
                                 <i class="fas fa-chart-line" style="color:var(--color-primary); margin-right:8px;"></i>
-                                <strong>Interprétation :</strong> Le graphique ci-dessous illustre le différentiel de classification. Une valeur positive indique un gain de parcelles pour la classe concernée dans la méthode M2.
+                                <strong>Interprétation :</strong> Le graphique ci-dessous illustre le différentiel de classification. Une barre verte (vers la droite) indique un gain en M2, une barre rouge (vers la gauche) indique une perte.
                             </p>
                     </div>
                         <div class="comparison-box">
@@ -327,18 +352,15 @@
         var currentMethod = 'm1';
         var selectedDalleId = null, selectedFeature = null;
 
-        // MODIFICATION NÉCESSAIRE : Fonction de lecture intelligente (Gzip ou Normal)
         async function fetchGeoJSON(url) {
             const response = await fetch(url);
             if (!response.ok) throw new Error("Fichier introuvable : " + url);
             
-            // Si le nom du fichier finit par .gz, on décompresse
             if (url.endsWith('.gz')) {
                 const buffer = await response.arrayBuffer();
                 const decompressed = pako.ungzip(new Uint8Array(buffer), { to: 'string' });
                 return JSON.parse(decompressed);
             }
-            // Sinon on lit normalement
             return await response.json();
         }
 
@@ -347,10 +369,6 @@
         };
         const orderedCats = ['Artificialisé', 'Agricole', 'Forêt', 'Nature', 'Eau'];
         
-        const LABELS = {
-            'ARTIF': 'Artificialisé', 'AGRI': 'Agricole', 'FORET': 'Forêt', 'NATURE': 'Nature', 'EAU': 'Eau'
-        };
-
         // 1. INITIALISATION MAP
         var map = L.map('map', { zoomControl: false, attributionControl:false }).setView([43.1026, 2.4140], 12);
         L.control.zoom({position:'bottomright'}).addTo(map);
@@ -366,9 +384,8 @@
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(miniMap);
         var miniGeoLayer = L.layerGroup().addTo(miniMap);
 
-        // 2. CHARGEMENT DONNÉES (MODIFIÉ POUR APPELER LA FONCTION INTELLIGENTE)
+        // 2. CHARGEMENT DONNÉES
         Promise.all([
-            // Ici, tu peux mettre .gz ou laisser tel quel, le code détectera
             fetchGeoJSON('donne/GLOBAL_DALLES.geojson'),
             fetchGeoJSON('donne/METHODE_2.geojson'),
             fetch('https://raw.githubusercontent.com/gregoiredavid/france-geojson/master/departements/11-aude/departement-11-aude.geojson').then(r=>r.json())
@@ -552,7 +569,9 @@
                 container.innerHTML += `
                     <div class="stat-group">
                         <div class="stat-header"><span class="stat-label"><div class="stat-dot" style="background:${colors[cat]}"></div> ${cat}</span><span class="stat-pct">${pct}%</span></div>
-                        <div class="progress-track"><div class="progress-fill" style="width:${pct}%; background:${colors[cat]}"></div></div>
+                        <div style="display:flex; align-items:center;">
+                            <div class="progress-track"><div class="progress-fill" style="width:${pct}%; background:${colors[cat]}"></div></div>
+                        </div>
                         <div class="stat-details"><span>${stats.counts[cat]} parcelles</span><div>${srcBadge} <span class="badge badge-ia">${avg}% </span></div></div>
                     </div>`;
             });
@@ -561,21 +580,34 @@
         function drawComparatif(c1, c2) {
             var container = document.getElementById('compList'); container.innerHTML = "";
             var diffs = [];
+            
             orderedCats.forEach(cat => {
                 var d = (c2[cat]||0) - (c1[cat]||0);
                 if(d !== 0) diffs.push({cat:cat, val:d});
             });
+            
             if(diffs.length === 0) { container.innerHTML = "<div style='text-align:center; opacity:0.5; font-size:0.8rem;'>Aucune différence M1/M2</div>"; return; }
+            
             var max = Math.max(...diffs.map(x=>Math.abs(x.val)));
+            
             diffs.forEach(o => {
-                var w = (Math.abs(o.val)/max)*100;
+                // Calcul de la position et largeur
+                // Centre = 50%
+                var w = (Math.abs(o.val) / max) * 50; 
                 var isPos = o.val > 0;
                 var col = isPos ? '#84CC16' : '#EF4444';
                 var sign = isPos ? '+' : '';
+                
+                // Si Positif : départ 50%, vers droite
+                // Si Négatif : départ 50%, vers gauche
+                var positionStyle = isPos ? 'left: 50%;' : 'right: 50%;';
+
                 container.innerHTML += `
                     <div class="comp-row">
                         <div class="comp-lbl">${o.cat}</div>
-                        <div class="comp-track"><div class="comp-bar" style="width:${w/2}%; background:${col}; ${isPos?'left:0':'right:100%; transform-origin:right;'}"></div></div>
+                        <div class="comp-track">
+                            <div class="comp-bar" style="width:${w}%; background:${col}; ${positionStyle}"></div>
+                        </div>
                         <div class="comp-val" style="color:${col}">${sign}${o.val} <span style="font-weight:400; font-size:0.7em; color:gray">parc.</span></div>
                     </div>`;
             });
