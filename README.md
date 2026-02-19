@@ -17,7 +17,6 @@ Le projet est structuré autour de quatre composantes principales :
 | **Scripts Python** | Codes sources documentés assurant la chaîne de traitement, du prétraitement à la production des indices de confiance. |
 | **Géo-visualisation** | Interface interactive déployée permettant l'exploration spatiale des résultats. |
 | **Résultats** | Sorties de données au format CSV et productions cartographiques (atlas et couches géographiques). |
-| **Article scientifique** | Documentation complète détaillant le contexte, la méthodologie, l'analyse des résultats et les conclusions. |
 
 ---
 
