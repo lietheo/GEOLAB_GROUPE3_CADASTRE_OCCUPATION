@@ -43,3 +43,6 @@ Ce projet est sous licence **MIT**. Consulter le fichier `LICENSE` pour les cond
 
 ## Auteurs
 **S. Mercier, M. Uozumi, A. Sery, T. Liegeon.** *Master II Observation de la Terre et Géomatique (OTG), Université de Strasbourg (2025-2026).*
+
+## Note
+** Des documents ou dossiers ne sont pas mis disponibles sans l'accrod des commandiatires **
